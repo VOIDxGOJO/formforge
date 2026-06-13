@@ -1,107 +1,241 @@
-# FormForge
+<div align="center">
 
-Multi-tenant SaaS form builder and workflow automation platform.
+# ⚒️ FormForge
 
-## Architecture
+**Build forms. Collect answers. Automate everything.**
+
+A production-grade, multi-tenant SaaS for drag-and-drop form building, real-time analytics, and workflow automation — Typeform meets Zapier, engineered as a clean monorepo.
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/)
+[![Express](https://img.shields.io/badge/Express-API-000000?logo=express)](https://expressjs.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-PostgreSQL-2D3748?logo=prisma)](https://www.prisma.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+[Quick Start](#-quick-start) · [Features](#-features) · [Architecture](#-architecture) · [Deploy](#-deploy) · [Contributing](#-contributing)
+
+</div>
+
+---
+
+## ✨ Why FormForge?
+
+Most form builders are either pretty demos or over-engineered microservices. **FormForge sits in the sweet spot** — a real SaaS architecture you can run locally, fork for your portfolio, or deploy to production.
+
+| You get | Without the pain of |
+|---------|---------------------|
+| Drag-and-drop form builder | Kafka / microservices |
+| Workspace RBAC (Owner → Viewer) | Tutorial CRUD apps |
+| Webhook retry engine + HMAC signing | Vendor lock-in |
+| Live submission counter (SSE) | Socket.io complexity |
+| Analytics dashboard | AI buzzword features |
+
+---
+
+## 🚀 Features
+
+### For teams
+- **Multi-tenant workspaces** — isolated data, team invites, role-based access
+- **Form builder** — text, email, number, textarea, dropdown, file fields with undo/redo
+- **Public forms** — shareable `/f/your-slug` pages, no login required
+
+### For builders
+- **Workflow engine** — trigger on submission: send email (Resend) or POST webhook
+- **Webhook reliability** — DB-backed delivery log, exponential backoff, dead-letter after 5 attempts
+- **Real-time dashboard** — SSE pushes new submission counts without polling
+- **Analytics** — 30-day volume chart, per-form breakdown, active workflow stats
+
+### For engineers
+- **Clean architecture** — routes → controllers → services → repositories
+- **Strict TypeScript** everywhere — shared contracts in `packages/types`
+- **Zod validation** on every API input
+- **Centralized error handling** — consistent `{ success, data, error }` responses
+- **Docker-ready** — dev & production compose files included
+
+---
+
+## 🏗 Architecture
 
 ```
-Browser (Next.js) ──HTTP/cookies──► Express API ──Prisma──► PostgreSQL
-                         │                    │
-                         └── SSE ◄────────────┘
-                         S3 (presigned uploads)
-                         Resend (email)
-                         Webhook deliveries + cron retry
+┌─────────────┐     cookies + REST     ┌─────────────┐     Prisma     ┌────────────┐
+│  Next.js    │ ◄────────────────────► │  Express    │ ◄────────────► │ PostgreSQL │
+│  apps/web   │     SSE (live count)   │  apps/api   │                └────────────┘
+└─────────────┘                        └──────┬──────┘
+                                              │
+                         ┌────────────────────┼────────────────────┐
+                         ▼                    ▼                    ▼
+                    Resend Email        S3 Presign           Webhook + Cron
+                    (invites, flows)    (file uploads)       (retry job)
 ```
 
-## Monorepo
+### Monorepo layout
 
-| Package | Description |
-|---------|-------------|
-| `apps/api` | Express + Prisma backend |
-| `apps/web` | Next.js 14 frontend |
-| `packages/types` | Shared TypeScript contracts |
+| Package | Role |
+|---------|------|
+| [`apps/web`](apps/web) | Next.js 14 dashboard, builder, public form renderer |
+| [`apps/api`](apps/api) | Express API, Prisma, workflows, webhooks, SSE |
+| [`packages/types`](packages/types) | Shared TypeScript API contracts |
 
-## Local setup
+---
+
+## ⚡ Quick Start
+
+> **3 terminals. 5 minutes. You're live.**
 
 ### Prerequisites
 
-- Node.js 20+
-- Docker (for Postgres)
-- npm
+- **Node.js 20+**
+- **Docker Desktop** (for PostgreSQL)
+- **npm** (comes with Node)
 
-### 1. Install dependencies
+### 1. Clone & install
 
 ```bash
+git clone https://github.com/VOIDxGOJO/formforge.git
+cd formforge
 npm install
 ```
 
 ### 2. Environment
 
-Copy `.env.example` to `apps/api/.env` and `apps/web/.env.local`. Update secrets.
+```bash
+# Windows PowerShell
+copy .env.example apps\api\.env
+copy apps\web\.env.local.example apps\web\.env.local
+```
+
+Default values work for local dev. Change JWT secrets before any public deployment.
 
 ### 3. Database
 
 ```bash
-docker compose up -d postgres
-cd apps/api && npx prisma migrate dev
+npm run db:up
+npm run db:migrate
 ```
 
-### 4. Run dev servers
+### 4. Run
 
 ```bash
-# Terminal 1 — API (port 3001)
-npm run dev --workspace=@formforge/api
+# Terminal 1 — API  →  http://localhost:3001
+npm run dev:api
 
-# Terminal 2 — Web (port 3000)
-npm run dev --workspace=@formforge/web
+# Terminal 2 — Web  →  http://localhost:3000
+npm run dev:web
 ```
 
-Or full stack:
+### 5. Smoke test
 
-```bash
-docker compose up --build
-```
+1. Open **http://localhost:3000/register** — create an account
+2. **Dashboard** → create a form → open **Builder** → add fields → **Save**
+3. Visit **`/f/your-form-slug`** — submit a response
+4. Check **Responses** inbox — your submission appears
+5. API health: **http://localhost:3001/api/health** → `"db": "connected"`
 
-### 5. Verify
+---
 
-- API health: http://localhost:3001/api/health
-- Web: http://localhost:3000
-- Register → dashboard → create form → builder → public `/f/[slug]`
+## 🛠 Scripts
 
-## Environment variables
+| Command | What it does |
+|---------|--------------|
+| `npm run dev:api` | Start Express API with hot reload |
+| `npm run dev:web` | Start Next.js frontend |
+| `npm run setup` | Install + Postgres + migrate (first-time) |
+| `npm run build` | Production build (all packages) |
+| `npm run typecheck` | TypeScript strict check |
 
-| Variable | Used by | Purpose |
-|----------|---------|---------|
-| `DATABASE_URL` | API | PostgreSQL connection |
-| `JWT_ACCESS_SECRET` | API | 15min access JWT |
-| `JWT_REFRESH_SECRET` | API | 7d refresh JWT |
-| `WEBHOOK_SIGNING_SECRET` | API | HMAC for webhook payloads |
-| `RESEND_API_KEY` | API | Transactional email |
-| `RESEND_FROM_EMAIL` | API | Sender address |
-| `AWS_*` | API | S3 presigned uploads |
-| `CORS_ORIGIN` | API | Allowed frontend origin |
-| `PORT` | API | API port (default 3001) |
-| `NEXT_PUBLIC_API_URL` | Web | API base URL |
-| `NEXT_PUBLIC_APP_URL` | Web | App URL for invite links |
+---
 
-## Railway deployment
+## 🔐 Environment Variables
 
-1. Create a new project on Railway.
-2. Add **PostgreSQL** plugin; copy `DATABASE_URL` to API service.
-3. Deploy **API** from `apps/api/Dockerfile` (or root with dockerfile path).
-4. Deploy **Web** from `apps/web/Dockerfile` with build args `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_APP_URL`.
-5. Set all env vars from the table above on the API service.
-6. Run migrations: `npx prisma migrate deploy` (one-off command or release phase).
-7. Point custom domains; set `CORS_ORIGIN` to your web URL.
+<details>
+<summary><strong>API (<code>apps/api/.env</code>)</strong></summary>
 
-## Scripts
+| Variable | Purpose |
+|----------|---------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `JWT_ACCESS_SECRET` | 15-minute access token signing |
+| `JWT_REFRESH_SECRET` | 7-day refresh token signing |
+| `WEBHOOK_SIGNING_SECRET` | HMAC for outbound webhooks |
+| `RESEND_API_KEY` | Email (invites + workflow actions) |
+| `AWS_*` | S3 presigned file uploads |
+| `CORS_ORIGIN` | Frontend URL (e.g. `http://localhost:3000`) |
+| `PORT` | API port (default `3001`) |
 
-```bash
-npm run build      # Build all packages
-npm run typecheck  # TypeScript check
-npm run dev        # Turbo dev (api + web)
-```
+</details>
 
-## License
+<details>
+<summary><strong>Web (<code>apps/web/.env.local</code>)</strong></summary>
 
-Private — FormForge
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_API_URL` | API base URL |
+| `NEXT_PUBLIC_APP_URL` | App URL (invite links) |
+
+</details>
+
+---
+
+## 🚢 Deploy
+
+FormForge is a **full-stack app** (API + DB + frontend). Recommended hosts:
+
+| Service | Hosts |
+|---------|-------|
+| **Railway** (recommended) | API + Web + PostgreSQL in one project |
+| **Render** | API + Web + managed Postgres |
+| **Vercel + Railway** | Web on Vercel, API + DB on Railway |
+
+> **Netlify alone won't work** — it can't run the Express API or PostgreSQL. Use Netlify only for the frontend if you host the API elsewhere.
+
+See [Railway steps](#railway-quick-deploy) in the collapsible below.
+
+<details>
+<summary><strong>Railway quick deploy</strong></summary>
+
+1. New Railway project → add **PostgreSQL** plugin
+2. Deploy **API** service (`apps/api/Dockerfile`) → set all API env vars
+3. Deploy **Web** service (`apps/web/Dockerfile`) → set `NEXT_PUBLIC_*` vars
+4. Release command: `npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma`
+5. Set `CORS_ORIGIN` to your production web URL
+
+</details>
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! This project is built to be forked, extended, and learned from.
+
+1. Fork the repo
+2. Create a branch: `git checkout -b feat/amazing-thing`
+3. Commit: `git commit -m "feat: add amazing thing"`
+4. Push: `git push origin feat/amazing-thing`
+5. Open a Pull Request
+
+Please keep PRs focused. Run `npm run typecheck` before submitting.
+
+---
+
+## 🧱 Tech Stack
+
+**Frontend:** Next.js 14 · Tailwind · Zustand · TanStack Query · @dnd-kit · Recharts · React Hook Form · Zod
+
+**Backend:** Express · Prisma · PostgreSQL · JWT (httpOnly cookies) · node-cron · SSE · Resend · AWS S3
+
+**Tooling:** Turborepo · TypeScript strict · Docker · GitHub Actions CI
+
+---
+
+## 📄 License
+
+[MIT](LICENSE) — use it, fork it, ship it.
+
+---
+
+<div align="center">
+
+**Built with care for engineers who want real architecture, not toy demos.**
+
+⭐ Star this repo if FormForge helps your learning or your next side project.
+
+</div>
