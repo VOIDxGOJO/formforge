@@ -1,0 +1,33 @@
+{
+  "name": "formforge",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "npm@11.2.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:api": "npm run dev --workspace=@formforge/api",
+    "dev:web": "npm run dev --workspace=@formforge/web",
+    "db:up": "docker compose up -d postgres",
+    "db:migrate": "npm run prisma:migrate --workspace=@formforge/api",
+    "setup": "npm install && npm run db:up && npm run db:migrate",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.3",
+    "typescript": "^5.8.3",
+    "prettier": "^3.5.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "overrides": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}

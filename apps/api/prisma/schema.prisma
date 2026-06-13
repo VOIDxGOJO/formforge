@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum ActionType {
+  SEND_EMAIL
+  WEBHOOK
+}
+
+enum DeliveryStatus {
+  PENDING
+  DELIVERED
+  FAILED
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  name          String
+  memberships   Membership[]
+  refreshTokens RefreshToken[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Workspace {
+  id           String        @id @default(uuid())
+  name         String
+  slug         String        @unique
+  memberships  Membership[]
+  forms        Form[]
+  inviteTokens InviteToken[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Membership {
+  id          String    @id @default(uuid())
+  userId      String
+  workspaceId String
+  role        Role      @default(MEMBER)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, workspaceId])
+  @@index([userId])
+  @@index([workspaceId])
+}
+
+model InviteToken {
+  id          String    @id @default(uuid())
+  workspaceId String
+  email       String
+  token       String    @unique
+  role        Role      @default(MEMBER)
+  expiresAt   DateTime
+  usedAt      DateTime?
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@index([workspaceId])
+  @@index([token])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+}
+
+model Form {
+  id          String       @id @default(uuid())
+  workspaceId String
+  name        String
+  slug        String       @unique
+  fields      Json         @default("[]")
+  isActive    Boolean      @default(true)
+  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  submissions Submission[]
+  workflows   Workflow[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([workspaceId])
+  @@index([slug])
+}
+
+model Submission {
+  id                String            @id @default(uuid())
+  formId            String
+  responses         Json
+  ipAddress         String?
+  userAgent         String?
+  form              Form              @relation(fields: [formId], references: [id], onDelete: Cascade)
+  webhookDeliveries WebhookDelivery[]
+  submittedAt       DateTime          @default(now())
+
+  @@index([formId])
+  @@index([submittedAt])
+}
+
+model Workflow {
+  id        String         @id @default(uuid())
+  formId    String
+  name      String
+  isActive  Boolean        @default(true)
+  form      Form           @relation(fields: [formId], references: [id], onDelete: Cascade)
+  steps     WorkflowStep[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([formId])
+}
+
+model WorkflowStep {
+  id                String            @id @default(uuid())
+  workflowId        String
+  actionType        ActionType
+  actionConfig      Json
+  order             Int               @default(0)
+  workflow          Workflow          @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  webhookDeliveries WebhookDelivery[]
+
+  @@index([workflowId])
+}
+
+model WebhookDelivery {
+  id                 String         @id @default(uuid())
+  workflowStepId     String
+  submissionId       String
+  status             DeliveryStatus @default(PENDING)
+  attemptCount       Int            @default(0)
+  nextRetryAt        DateTime       @default(now())
+  lastResponseBody   String?
+  lastResponseStatus Int?
+  workflowStep       WorkflowStep   @relation(fields: [workflowStepId], references: [id], onDelete: Cascade)
+  submission         Submission     @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  @@index([status, nextRetryAt])
+  @@index([submissionId])
+}
