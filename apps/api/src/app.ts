@@ -18,10 +18,22 @@ import { errorHandler } from './middleware/error-handler.js';
 export const createApp = (): express.Application => {
   const app = express();
 
+  const corsOrigins = (process.env.CORS_ORIGIN ?? 'http://localhost:3000')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+
   app.use(helmet());
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN,
+      origin: (origin, callback) => {
+        // Allow same-origin / server-to-server / tools with no Origin header
+        if (!origin || corsOrigins.includes(origin)) {
+          callback(null, true);
+          return;
+        }
+        callback(new Error(`CORS blocked for origin: ${origin}`));
+      },
       credentials: true
     })
   );
