@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { UserPlus } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import { useWorkspace } from '@/hooks/use-workspace';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 
 type Member = {
@@ -14,6 +16,15 @@ type Member = {
   role: string;
   user: { id: string; name: string; email: string };
 };
+
+function initialsOf(name: string) {
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+}
 
 export default function SettingsPage() {
   const { workspaceId } = useWorkspace();
@@ -54,31 +65,47 @@ export default function SettingsPage() {
     }
   });
 
-  if (workspace.isLoading) return <Skeleton className="h-64" />;
+  if (workspace.isLoading)
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-8 w-56" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-48 w-full" />
+      </div>
+    );
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Workspace settings</h1>
+    <div className="max-w-2xl space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Workspace settings</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Manage your workspace name and team members</p>
+      </div>
+
       <Card>
         <CardHeader>
-          <CardTitle>General</CardTitle>
+          <CardTitle className="text-lg">General</CardTitle>
+          <p className="text-sm text-muted-foreground">Update your workspace display name</p>
         </CardHeader>
-        <CardContent className="flex gap-2">
-          <Input
-            defaultValue={workspace.data?.name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Workspace name"
-          />
-          <Button onClick={() => updateName.mutate()} disabled={!name}>
-            Save
-          </Button>
+        <CardContent>
+          <div className="flex gap-2">
+            <Input
+              defaultValue={workspace.data?.name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Workspace name"
+            />
+            <Button onClick={() => updateName.mutate()} disabled={!name}>
+              Save
+            </Button>
+          </div>
         </CardContent>
       </Card>
+
       <Card>
         <CardHeader>
-          <CardTitle>Team</CardTitle>
+          <CardTitle className="text-lg">Team</CardTitle>
+          <p className="text-sm text-muted-foreground">Invite people to collaborate in this workspace</p>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-5">
           <div className="flex gap-2">
             <Input
               placeholder="colleague@company.com"
@@ -86,16 +113,27 @@ export default function SettingsPage() {
               onChange={(e) => setInviteEmail(e.target.value)}
             />
             <Button onClick={() => invite.mutate()} disabled={!inviteEmail}>
+              <UserPlus className="mr-2 h-4 w-4" />
               Invite
             </Button>
           </div>
+
           <ul className="space-y-2">
             {members.data?.map((m) => (
-              <li key={m.id} className="flex justify-between rounded border px-3 py-2 text-sm">
-                <span>
-                  {m.user.name} ({m.user.email})
-                </span>
-                <span className="text-muted-foreground">{m.role}</span>
+              <li
+                key={m.id}
+                className="transition-smooth flex items-center justify-between rounded-lg border border-border px-3 py-2.5 hover:bg-secondary/40"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-700">
+                    {initialsOf(m.user.name)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{m.user.name}</p>
+                    <p className="text-xs text-muted-foreground">{m.user.email}</p>
+                  </div>
+                </div>
+                <Badge variant={m.role === 'OWNER' ? 'default' : 'secondary'}>{m.role}</Badge>
               </li>
             ))}
           </ul>
