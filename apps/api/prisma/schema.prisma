@@ -19,6 +19,12 @@ enum ActionType {
   WEBHOOK
 }
 
+enum AdaptiveSessionStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
 enum DeliveryStatus {
   PENDING
   DELIVERED
@@ -90,17 +96,27 @@ model RefreshToken {
 }
 
 model Form {
-  id          String       @id @default(uuid())
-  workspaceId String
-  name        String
-  slug        String       @unique
-  fields      Json         @default("[]")
-  isActive    Boolean      @default(true)
-  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  submissions Submission[]
-  workflows   Workflow[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id                 String              @id @default(uuid())
+  workspaceId        String
+  name               String
+  slug               String              @unique
+  /// What the form is meant to find out; used by AI generation and coverage checks.
+  objective          String?
+  /// Field list; each field may carry metadata (informationTarget, estimatedSeconds, relevance, ...).
+  fields             Json                @default("[]")
+  /// Adaptive-mode settings (enabled, limits, stop rule, utility weights). Null = static form.
+  adaptiveConfig     Json?
+  isActive           Boolean             @default(true)
+  workspace          Workspace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  submissions        Submission[]
+  workflows          Workflow[]
+  qualityReports     QualityReport[]
+  adaptiveSessions   AdaptiveSession[]
+  modelSnapshots     ModelSnapshot[]
+  syntheticResponses SyntheticResponse[]
+  responseInsights   ResponseInsight[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 
   @@index([workspaceId])
   @@index([slug])
@@ -110,9 +126,14 @@ model Submission {
   id                String            @id @default(uuid())
   formId            String
   responses         Json
+  /// Values predicted by the adaptive engine for skipped questions: { fieldId: { value, confidence } }.
+  /// Kept apart from `responses` so predictions are never mistaken for real answers.
+  imputed           Json?
+  sessionId         String?           @unique
   ipAddress         String?
   userAgent         String?
   form              Form              @relation(fields: [formId], references: [id], onDelete: Cascade)
+  session           AdaptiveSession?  @relation(fields: [sessionId], references: [id], onDelete: SetNull)
   webhookDeliveries WebhookDelivery[]
   submittedAt       DateTime          @default(now())
 
@@ -161,4 +182,91 @@ model WebhookDelivery {
 
   @@index([status, nextRetryAt])
   @@index([submissionId])
+}
+
+// ---------------------------------------------------------------- FormForge 2.0
+
+model QualityReport {
+  id               String   @id @default(uuid())
+  formId           String
+  score            Int
+  /// [{ fieldId, type, severity, message, suggestion }]
+  issues           Json
+  estimatedSeconds Int
+  form             Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now())
+
+  @@index([formId, createdAt])
+}
+
+/// Fitted respondent model (latent class model) used by adaptive sessions.
+model ModelSnapshot {
+  id          String            @id @default(uuid())
+  formId      String
+  /// Number of latent classes.
+  k           Int
+  /// Field ids in the order used by `theta` and `nmi`.
+  questionIds String[]
+  /// Class priors, length k.
+  pi          Json
+  /// theta[q][k][option] = P(option | class k).
+  theta       Json
+  /// Normalised mutual information between questions.
+  nmi         Json
+  nReal       Int
+  nSynthetic  Int
+  form        Form              @relation(fields: [formId], references: [id], onDelete: Cascade)
+  sessions    AdaptiveSession[]
+  createdAt   DateTime          @default(now())
+
+  @@index([formId, createdAt])
+}
+
+/// A respondent part-way through an adaptive form.
+model AdaptiveSession {
+  id          String                @id @default(uuid())
+  formId      String
+  snapshotId  String?
+  /// Field ids in the order they were asked.
+  askedOrder  String[]
+  answers     Json                  @default("{}")
+  /// Posterior over latent classes after the last answer.
+  posterior   Float[]
+  status      AdaptiveSessionStatus @default(ACTIVE)
+  form        Form                  @relation(fields: [formId], references: [id], onDelete: Cascade)
+  snapshot    ModelSnapshot?        @relation(fields: [snapshotId], references: [id], onDelete: SetNull)
+  submission  Submission?
+  startedAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  completedAt DateTime?
+
+  @@index([formId, status])
+}
+
+/// Warm-start answers written by the LLM for personas. Never shown as submissions.
+model SyntheticResponse {
+  id        String   @id @default(uuid())
+  formId    String
+  persona   String
+  responses Json
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([formId])
+}
+
+/// Cached response intelligence for a form's open-text answers.
+model ResponseInsight {
+  id        String   @id @default(uuid())
+  formId    String
+  summary   String
+  topics    Json
+  sentiment Json
+  clusters  Json
+  /// Number of submissions the insight was computed from.
+  basedOn   Int
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([formId, createdAt])
 }

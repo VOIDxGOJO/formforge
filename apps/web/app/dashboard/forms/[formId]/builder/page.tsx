@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api';
@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import type { FieldSchema } from '@formforge/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
-type FormData = { id: string; name: string; fields: FieldSchema[]; isActive: boolean };
+type FormData = { id: string; name: string; objective: string | null; fields: FieldSchema[]; isActive: boolean };
 
 export default function BuilderPage() {
   const { formId } = useParams<{ formId: string }>();
@@ -30,15 +30,18 @@ export default function BuilderPage() {
       apiFetch<FormData>(`/api/v1/workspaces/${workspaceId}/forms/${formId}`)
   });
 
+  const [objective, setObjective] = useState('');
+
   useEffect(() => {
     if (data?.fields) setFields(data.fields as FieldSchema[]);
+    setObjective(data?.objective ?? '');
   }, [data, setFields]);
 
   const save = useMutation({
     mutationFn: () =>
       apiFetch(`/api/v1/workspaces/${workspaceId}/forms/${formId}`, {
         method: 'PATCH',
-        body: JSON.stringify({ fields, name: data?.name })
+        body: JSON.stringify({ fields, name: data?.name, objective: objective.trim() || null })
       })
   });
 
@@ -75,6 +78,20 @@ export default function BuilderPage() {
             {save.isPending ? 'Saving…' : 'Save'}
           </Button>
         </div>
+      </div>
+      <div className="space-y-1">
+        <label htmlFor="form-objective" className="text-sm font-medium">
+          Form objective
+        </label>
+        <textarea
+          id="form-objective"
+          rows={2}
+          maxLength={1000}
+          value={objective}
+          onChange={(e) => setObjective(e.target.value)}
+          placeholder="What do you want to learn from this form? Used by AI generation and the quality report."
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+        />
       </div>
       <div className="grid gap-4 lg:grid-cols-[220px_1fr_280px]">
         <FieldPalette onAdd={builder.addField} />

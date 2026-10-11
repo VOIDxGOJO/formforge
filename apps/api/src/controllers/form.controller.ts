@@ -26,7 +26,8 @@ export const formController = {
     const data = await formService.create(
       req.user!.id,
       req.params.workspaceId as string,
-      req.body.name
+      req.body.name,
+      req.body.objective
     );
     sendSuccess(res, data, 201);
   },
