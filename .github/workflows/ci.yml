@@ -16,6 +16,8 @@ jobs:
           node-version: '20'
           cache: npm
       - run: npm ci
+      # The Prisma client is generated code; typecheck, build and tests need it.
+      - run: npm run prisma:generate --workspace=@formforge/api
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run build
