@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ActionType } from '@formforge/types';
+import { AdaptiveSettingsCard } from '@/components/forms/AdaptiveSettingsCard';
 
 type Workflow = {
   id: string;
@@ -66,7 +67,9 @@ export default function FormSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Form workflows</h1>
+      <h1 className="text-2xl font-semibold">Form settings</h1>
+      {workspaceId && <AdaptiveSettingsCard workspaceId={workspaceId} formId={formId} />}
+      <h2 className="pt-2 text-xl font-semibold">Workflows</h2>
       <Card>
         <CardHeader>
           <CardTitle>Create workflow</CardTitle>

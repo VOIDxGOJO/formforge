@@ -10,11 +10,13 @@ import { SubmissionDetailDrawer } from '@/components/inbox/SubmissionDetailDrawe
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
+import type { FieldSchema } from '@formforge/types';
 
 type Submission = {
   id: string;
   submittedAt: string;
   responses: Record<string, unknown>;
+  imputed?: Record<string, { value: unknown; confidence: number }> | null;
 };
 
 export default function ResponsesPage() {
@@ -36,6 +38,13 @@ export default function ResponsesPage() {
       );
     }
   });
+
+  const form = useQuery({
+    queryKey: ['form', workspaceId, formId],
+    enabled: !!workspaceId && !!formId,
+    queryFn: () => apiFetch<{ fields: FieldSchema[] }>(`/api/v1/workspaces/${workspaceId}/forms/${formId}`)
+  });
+  const fields = form.data?.fields ?? [];
 
   const selected = query.data?.find((s) => s.id === selectedId) ?? null;
 
@@ -70,11 +79,12 @@ export default function ResponsesPage() {
       {!query.data?.length ? (
         <p className="text-muted-foreground">No submissions yet.</p>
       ) : (
-        <SubmissionTable items={query.data} onSelect={setSelectedId} />
+        <SubmissionTable items={query.data} fields={fields} onSelect={setSelectedId} />
       )}
       <SubmissionDetailDrawer
         open={!!selectedId}
         submission={selected}
+        fields={fields}
         onClose={() => setSelectedId(null)}
       />
     </div>
