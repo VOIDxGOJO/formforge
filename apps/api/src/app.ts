@@ -12,6 +12,7 @@ import { publicRouter } from './routes/public.routes.js';
 import { uploadsRouter } from './routes/uploads.routes.js';
 import { sseRouter } from './routes/sse.routes.js';
 import { aiFormsRouter } from './routes/ai-form.routes.js';
+import { formQualityRouter, qualityRouter } from './routes/quality.routes.js';
 import { globalRateLimiter } from './middleware/rate-limit.js';
 import { notFoundHandler } from './middleware/not-found.js';
 import { errorHandler } from './middleware/error-handler.js';
@@ -58,6 +59,8 @@ export const createApp = (): express.Application => {
   });
   app.use('/api/v1/auth', authRouter);
   app.use('/api/v1/workspaces', workspacesRouter);
+  app.use('/api/v1/workspaces/:workspaceId/forms/:formId/quality', formQualityRouter);
+  app.use('/api/v1/workspaces/:workspaceId/quality', qualityRouter);
   app.use(
     '/api/v1/workspaces/:workspaceId/forms',
     formsRouter

@@ -12,6 +12,7 @@ import { useDraftStore } from '@/store/draft-store';
 import { FieldPalette } from '@/components/builder/FieldPalette';
 import { FieldCanvas } from '@/components/builder/FieldCanvas';
 import { FieldConfigPanel } from '@/components/builder/FieldConfigPanel';
+import { QualityPanel } from '@/components/builder/QualityPanel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -127,6 +128,9 @@ export default function DraftBuilderPage() {
           onRemove={() => selected && builder.removeField(selected.id)}
         />
       </div>
+      {workspaceId && (
+        <QualityPanel workspaceId={workspaceId} fields={fields} objective={objective} onSelectField={builder.selectField} />
+      )}
     </div>
   );
 }

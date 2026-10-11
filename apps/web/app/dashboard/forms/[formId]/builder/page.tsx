@@ -10,6 +10,7 @@ import { useBuilderStore } from '@/store/builder-store';
 import { FieldPalette } from '@/components/builder/FieldPalette';
 import { FieldCanvas } from '@/components/builder/FieldCanvas';
 import { FieldConfigPanel } from '@/components/builder/FieldConfigPanel';
+import { QualityPanel } from '@/components/builder/QualityPanel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { FieldSchema } from '@formforge/types';
@@ -107,6 +108,9 @@ export default function BuilderPage() {
           onRemove={() => selected && builder.removeField(selected.id)}
         />
       </div>
+      {workspaceId && (
+        <QualityPanel workspaceId={workspaceId} fields={fields} objective={objective} onSelectField={builder.selectField} />
+      )}
     </div>
   );
 }

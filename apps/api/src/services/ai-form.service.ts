@@ -1,4 +1,4 @@
-import { FieldType, type FieldSchema } from '@formforge/types';
+import { FieldType, type FieldSchema, type QualityReport } from '@formforge/types';
 import { getAIProvider } from '../lib/ai/index.js';
 import { FORM_GENERATION_SYSTEM, formGenerationUserPrompt } from '../lib/ai/prompts.js';
 import {
@@ -6,6 +6,7 @@ import {
   type GeneratedForm,
   type GenerateFormRequest
 } from '../schemas/ai-form.schema.js';
+import { analyzeWithRules } from './quality/analyzer.js';
 
 export type FormDraft = {
   name: string;
@@ -13,6 +14,8 @@ export type FormDraft = {
   objective: string;
   fields: FieldSchema[];
 };
+
+export type FormDraftWithQuality = FormDraft & { quality: QualityReport };
 
 const WITH_PLACEHOLDER = new Set(['TEXT', 'NUMBER', 'EMAIL', 'TEXTAREA']);
 
@@ -50,13 +53,15 @@ export const toFormDraft = (generated: GeneratedForm, request: GenerateFormReque
 
 export const aiFormService = {
   /** Returns a draft only. Nothing is written to the database; the creator saves it from the builder. */
-  generate: async (request: GenerateFormRequest): Promise<FormDraft> => {
+  generate: async (request: GenerateFormRequest): Promise<FormDraftWithQuality> => {
     const generated = await getAIProvider().generateStructured(buildGeneratedFormSchema(request.questionCount), {
       name: 'generated_form',
       system: FORM_GENERATION_SYSTEM,
       user: formGenerationUserPrompt(request),
       temperature: 0.3
     });
-    return toFormDraft(generated, request);
+    const draft = toFormDraft(generated, request);
+    // Every draft arrives with its (instant) quality report.
+    return { ...draft, quality: analyzeWithRules({ fields: draft.fields, objective: draft.objective }) };
   }
 };
