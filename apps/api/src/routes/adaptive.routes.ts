@@ -4,9 +4,10 @@ import { z } from 'zod';
 import { authenticate } from '../middleware/authenticate.js';
 import { authorize } from '../middleware/authorize.js';
 import { validate } from '../middleware/validate.js';
-import { publicSessionRateLimiter } from '../middleware/rate-limit.js';
+import { aiRateLimiter, publicSessionRateLimiter } from '../middleware/rate-limit.js';
 import { adaptiveConfigSchema, formParamsSchema } from '../schemas/forms.schema.js';
 import { adaptiveService } from '../services/adaptive.service.js';
+import { syntheticService } from '../services/synthetic.service.js';
 import { asyncHandler } from '../lib/async-handler.js';
 import { sendSuccess } from '../lib/response.js';
 
@@ -82,5 +83,39 @@ publicAdaptiveRouter.post(
       await adaptiveService.complete(req.params.sessionId as string, { ipAddress: req.ip, userAgent: req.get('user-agent') }),
       201
     );
+  })
+);
+
+/** Synthetic warm start, mounted at /api/v1/workspaces/:workspaceId/forms/:formId/simulate */
+export const simulateRouter = Router({ mergeParams: true });
+const simulateBody = z.object({ personas: z.number().int().min(10).max(100).default(30) });
+simulateRouter.use(authenticate);
+simulateRouter.post(
+  '/',
+  validate(formParamsSchema, 'params'),
+  validate(simulateBody),
+  authorize([Role.OWNER, Role.ADMIN]),
+  aiRateLimiter,
+  asyncHandler(async (req: Request, res: Response) => {
+    const { workspaceId, formId } = req.params as FormParams;
+    sendSuccess(res, await syntheticService.generate(req.user!.id, workspaceId, formId, req.body.personas), 201);
+  })
+);
+simulateRouter.delete(
+  '/',
+  validate(formParamsSchema, 'params'),
+  authorize([Role.OWNER, Role.ADMIN]),
+  asyncHandler(async (req: Request, res: Response) => {
+    const { workspaceId, formId } = req.params as FormParams;
+    sendSuccess(res, await syntheticService.remove(req.user!.id, workspaceId, formId));
+  })
+);
+simulateRouter.get(
+  '/',
+  validate(formParamsSchema, 'params'),
+  authorize(allRoles),
+  asyncHandler(async (req: Request, res: Response) => {
+    const { workspaceId, formId } = req.params as FormParams;
+    sendSuccess(res, await syntheticService.sample(req.user!.id, workspaceId, formId));
   })
 );

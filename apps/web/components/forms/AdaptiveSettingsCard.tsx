@@ -166,7 +166,78 @@ export function AdaptiveSettingsCard({ workspaceId, formId }: { workspaceId: str
           </Button>
         </div>
         {refit.isError && <p className="text-destructive">{(refit.error as Error).message}</p>}
+        {canAdapt && <WarmStartSection base={`/api/v1/workspaces/${workspaceId}/forms/${formId}/simulate`} formId={formId} nSynthetic={model?.nSynthetic ?? 0} />}
       </CardContent>
     </Card>
+  );
+}
+
+function WarmStartSection({ base, formId, nSynthetic }: { base: string; formId: string; nSynthetic: number }) {
+  const queryClient = useQueryClient();
+  const [count, setCount] = useState(40);
+  const [showSample, setShowSample] = useState(false);
+  const refresh = () => {
+    void queryClient.invalidateQueries({ queryKey: ['adaptive', formId] });
+    void queryClient.invalidateQueries({ queryKey: ['synthetic', formId] });
+  };
+  const generate = useMutation({
+    mutationFn: () => apiFetch<{ personas: number }>(base, { method: 'POST', body: JSON.stringify({ personas: count }) }),
+    onSuccess: refresh
+  });
+  const remove = useMutation({ mutationFn: () => apiFetch(base, { method: 'DELETE' }), onSuccess: refresh });
+  const sample = useQuery({
+    queryKey: ['synthetic', formId],
+    enabled: showSample && nSynthetic > 0,
+    queryFn: () => apiFetch<Array<{ persona: string }>>(base)
+  });
+  const error = (generate.error ?? remove.error) as Error | null;
+
+  return (
+    <div className="space-y-3 rounded-md border px-3 py-3">
+      <div>
+        <p className="font-medium">Synthetic warm start</p>
+        <p className="text-muted-foreground">
+          For a new form with few responses, the AI writes respondent personas and answers as them, so the engine can
+          adapt from the first respondent. Synthetic answers only start the model: their weight fades as real responses
+          arrive (half after 25, a fifth after 100) and they never appear as responses or in insights.
+        </p>
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <select
+          aria-label="Number of personas"
+          value={count}
+          onChange={(e) => setCount(Number(e.target.value))}
+          className="h-9 rounded-md border border-input bg-background px-2 text-sm"
+        >
+          {[20, 40, 60, 100].map((n) => (
+            <option key={n} value={n}>
+              {n} personas
+            </option>
+          ))}
+        </select>
+        <Button size="sm" variant="secondary" onClick={() => generate.mutate()} disabled={generate.isPending || remove.isPending}>
+          {generate.isPending ? 'Writing personas… about 15 s' : nSynthetic ? 'Replace synthetic respondents' : 'Generate synthetic respondents'}
+        </Button>
+        {nSynthetic > 0 && (
+          <>
+            <Button size="sm" variant="outline" onClick={() => remove.mutate()} disabled={generate.isPending || remove.isPending}>
+              Remove
+            </Button>
+            <button type="button" className="text-sm underline underline-offset-2" onClick={() => setShowSample((s) => !s)}>
+              {showSample ? 'Hide' : 'Show'} sample personas
+            </button>
+          </>
+        )}
+      </div>
+      {generate.isSuccess && <p className="text-emerald-700">{generate.data.personas} synthetic respondents added and the model retrained.</p>}
+      {error && <p className="text-destructive">{error.message}</p>}
+      {showSample && sample.data && (
+        <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
+          {sample.data.map((s, i) => (
+            <li key={i}>{s.persona}</li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
