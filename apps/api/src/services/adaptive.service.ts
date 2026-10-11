@@ -31,8 +31,21 @@ const toPublicField = ({ id, type, label, placeholder, required, options }: Fiel
   id, type, label, placeholder, required, options
 });
 
-const loadModel = async (formId: string, bank: EngineQuestion[]): Promise<{ model: RespondentModel; snapshotId: string | null }> => {
-  const snap = await prisma.modelSnapshot.findFirst({ where: { formId }, orderBy: { createdAt: 'desc' } });
+/**
+ * Latest snapshot of the form, or, for a session in progress, the snapshot it started with
+ * (null = it started without a model), so a refit mid-session cannot change its model.
+ */
+const loadModel = async (
+  formId: string,
+  bank: EngineQuestion[],
+  pinned?: string | null
+): Promise<{ model: RespondentModel; snapshotId: string | null }> => {
+  const snap =
+    pinned === undefined
+      ? await prisma.modelSnapshot.findFirst({ where: { formId }, orderBy: { createdAt: 'desc' } })
+      : pinned
+        ? await prisma.modelSnapshot.findUnique({ where: { id: pinned } })
+        : null;
   if (snap) {
     const theta = snap.theta as number[][][];
     if (modelMatchesBank(snap.questionIds, theta.map((byClass) => byClass[0]!.length), bank)) {
@@ -184,7 +197,7 @@ export const adaptiveService = {
     answers[fieldId] = empty ? null : value;
 
     const config = configOf(session.form);
-    const { model } = await loadModel(session.formId, plan.bank);
+    const { model } = await loadModel(session.formId, plan.bank, session.snapshotId);
     const next = step(plan, model, config, answers, session.askedOrder);
     await prisma.adaptiveSession.update({
       where: { id: sessionId },
@@ -209,7 +222,7 @@ export const adaptiveService = {
     const answers = session.answers as Record<string, unknown>;
     const fields = session.form.fields as FieldSchema[];
     const plan = buildPlan(fields);
-    const { model } = await loadModel(session.formId, plan.bank);
+    const { model } = await loadModel(session.formId, plan.bank, session.snapshotId);
     const state = step(plan, model, configOf(session.form), answers, session.askedOrder);
     if (session.askedOrder.some((id) => !(id in answers)) || state.fieldId !== null) {
       throw ConflictError('The form is not finished yet');

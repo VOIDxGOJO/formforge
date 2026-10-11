@@ -7,7 +7,7 @@ import { insightService } from '../../src/services/insights/insight.service.js';
 import { seededRandom } from '../../src/engine/model.js';
 import { app, createForm, FakeAI, newUser } from './helpers.js';
 
-// Report Table 7.1, T18-T28: the FormForge 2.0 routes, run against a real database.
+// Report Table 7.1, T18-T29: the FormForge 2.0 routes, run against a real database.
 // Model calls go to a deterministic fake provider, so the run is repeatable and offline.
 
 const opts = (...labels: string[]) => labels.map((label, i) => ({ label, value: `option_${i + 1}` }));
@@ -108,14 +108,34 @@ describe('Functional tests: FormForge 2.0', () => {
     expect(again.status).toBe(409);
   });
 
-  it('T22 the public form hides question metadata', async () => {
+  it('T22 a session keeps the model it started with when the form is retrained mid-session', async () => {
+    const start = await request(app).post(`/api/public/forms/${form.slug}/sessions`);
+    const { sessionId } = start.body.data;
+    const before = await prisma.adaptiveSession.findUniqueOrThrow({ where: { id: sessionId } });
+    expect((await owner.agent.post(`${base()}/adaptive/refit`)).status).toBe(201);
+    const latest = await prisma.modelSnapshot.findFirstOrThrow({ where: { formId: form.id }, orderBy: { createdAt: 'desc' } });
+    expect(latest.id).not.toBe(before.snapshotId);
+    // The session still runs to completion on its own snapshot.
+    let question = start.body.data.question;
+    while (question) {
+      const value = question.type === 'RATING' ? '3' : question.type === 'DROPDOWN' ? question.options[0].value : 'n/a';
+      const res = await request(app).post(`/api/public/sessions/${sessionId}/answers`).send({ fieldId: question.id, value });
+      expect(res.status).toBe(200);
+      question = res.body.data.question;
+    }
+    expect((await request(app).post(`/api/public/sessions/${sessionId}/complete`)).status).toBe(201);
+    const after = await prisma.adaptiveSession.findUniqueOrThrow({ where: { id: sessionId } });
+    expect(after.snapshotId).toBe(before.snapshotId);
+  });
+
+  it('T23 the public form hides question metadata', async () => {
     const res = await request(app).get(`/api/public/forms/${form.slug}`);
     const text = JSON.stringify(res.body.data);
     expect(text).not.toContain('relevance');
     expect(text).not.toContain('informationTarget');
   });
 
-  it('T23 AI generation returns a draft with metadata and a quality report', async () => {
+  it('T24 AI generation returns a draft with metadata and a quality report', async () => {
     const res = await owner.agent
       .post(`/api/v1/workspaces/${owner.workspaceId}/ai/forms/generate`)
       .send({ description: 'Feedback form for interns who finished a summer internship', questionCount: 3 });
@@ -125,14 +145,14 @@ describe('Functional tests: FormForge 2.0', () => {
     expect(res.body.data.quality.score).toBeGreaterThan(0);
   });
 
-  it('T24 the quality report of a saved form is stored and returned', async () => {
+  it('T25 the quality report of a saved form is stored and returned', async () => {
     const post = await owner.agent.post(`${base()}/quality`).send({ deep: false });
     expect(post.status).toBe(201);
     const get = await owner.agent.get(`${base()}/quality`);
     expect(get.body.data).toMatchObject({ id: post.body.data.id, score: post.body.data.score });
   });
 
-  it('T25 a synthetic warm start trains the model but never creates submissions', async () => {
+  it('T26 a synthetic warm start trains the model but never creates submissions', async () => {
     const before = await prisma.submission.count({ where: { formId: form.id } });
     const res = await owner.agent.post(`${base()}/simulate`).send({ personas: 20 });
     expect(res.status).toBe(201);
@@ -144,14 +164,14 @@ describe('Functional tests: FormForge 2.0', () => {
     expect(removed.body.data.removed).toBe(20);
   });
 
-  it('T26 a Viewer can read adaptive status but cannot start a warm start', async () => {
+  it('T27 a Viewer can read adaptive status but cannot start a warm start', async () => {
     const viewer = await newUser('Viewer');
     await prisma.membership.create({ data: { userId: (await prisma.user.findUniqueOrThrow({ where: { email: viewer.email } })).id, workspaceId: owner.workspaceId, role: Role.VIEWER } });
     expect((await viewer.agent.get(`${base()}/adaptive`)).status).toBe(200);
     expect((await viewer.agent.post(`${base()}/simulate`).send({ personas: 10 })).status).toBe(403);
   });
 
-  it('T27 insights mask personal details before any text reaches the model', async () => {
+  it('T28 insights mask personal details before any text reaches the model', async () => {
     const { submissionService } = await import('../../src/services/submission.service.js');
     const pii = ['priya.sharma@gmail.com', '9876543210', 'Ravi Kumar'];
     await submissionService.record(form, { responses: { consent: 'option_1', improve: `The stipend was late. Mail priya.sharma@gmail.com or call 9876543210.` } });
@@ -170,9 +190,9 @@ describe('Functional tests: FormForge 2.0', () => {
     }
   });
 
-  it('T28 the seventh AI request in a minute is rate limited', async () => {
-    // Six AI requests are allowed per user per minute; T23 (generate), T25 (simulate) and
-    // T27 (insights) used three of them, and T24 ran without the AI review.
+  it('T29 the seventh AI request in a minute is rate limited', async () => {
+    // Six AI requests are allowed per user per minute; T24 (generate), T26 (simulate) and
+    // T28 (insights) used three of them, and T25 ran without the AI review.
     const statuses: number[] = [];
     for (let i = 0; i < 4; i++) {
       const res = await owner.agent

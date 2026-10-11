@@ -155,7 +155,7 @@ npm run dev:web
 | `npm run build` | Production build (all packages) |
 | `npm run typecheck` | TypeScript strict check |
 | `npm test` | Unit tests (rules, engine parity, redactor, providers, …) |
-| `npm run test:functional -w @formforge/api` | 28 API tests against a real `<db>_test` database (needs `npm run db:up`) |
+| `npm run test:functional -w @formforge/api` | 29 API tests against a real `<db>_test` database (needs `npm run db:up`) |
 
 ---
 
