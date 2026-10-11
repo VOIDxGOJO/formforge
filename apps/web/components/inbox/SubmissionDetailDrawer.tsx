@@ -1,5 +1,6 @@
 'use client';
 
+import { createPortal } from 'react-dom';
 import type { FieldSchema } from '@formforge/types';
 import { formatDate } from '@/lib/utils';
 import { formatAnswer } from '@/lib/format-answer';
@@ -33,9 +34,13 @@ export function SubmissionDetailDrawer({
   ];
   const predicted = Object.entries(submission.imputed ?? {});
 
-  return (
+  // Portal: inside the page's space-y container the overlay would inherit a top margin.
+  return createPortal(
     <div className="fixed inset-0 z-50 flex justify-end bg-black/40" onClick={onClose}>
-      <div className="h-full w-full max-w-md overflow-y-auto bg-background p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="h-full w-full max-w-md overflow-y-auto bg-background p-6 shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-semibold">Submission detail</h3>
           <Button variant="ghost" size="sm" onClick={onClose}>
@@ -72,6 +77,7 @@ export function SubmissionDetailDrawer({
           </section>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

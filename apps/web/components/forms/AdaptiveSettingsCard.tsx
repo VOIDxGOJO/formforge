@@ -93,7 +93,7 @@ export function AdaptiveSettingsCard({ workspaceId, formId }: { workspaceId: str
               <li>Asked at the end: {questions.askedAfter.map((q) => `"${q.label}"`).join(', ')}.</li>
             )}
             {questions.skipped.length > 0 && (
-              <li>Left out in adaptive mode (optional text): {questions.skipped.map((q) => `"${q.label}"`).join(', ')}.</li>
+              <li>Left out in adaptive mode (optional, not choice or rating): {questions.skipped.map((q) => `"${q.label}"`).join(', ')}.</li>
             )}
           </ul>
         )}
