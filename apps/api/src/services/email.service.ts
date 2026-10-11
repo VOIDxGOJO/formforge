@@ -1,4 +1,4 @@
-import { resend, fromEmail } from '../lib/resend.js';
+import { getResend, fromEmail } from '../lib/resend.js';
 
 const escapeHtml = (text: string) =>
   text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c);
@@ -9,7 +9,7 @@ export const emailService = {
       console.log(`[email:dev] To: ${to} | Subject: ${subject}`);
       return { id: 'dev-mode' };
     }
-    return resend.emails.send({ from: fromEmail, to, subject, html });
+    return getResend().emails.send({ from: fromEmail, to, subject, html });
   },
 
   sendInvite: async (to: string, workspaceName: string, inviteUrl: string) =>
