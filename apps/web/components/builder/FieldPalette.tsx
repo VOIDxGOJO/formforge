@@ -9,6 +9,7 @@ const types = [
   FieldType.NUMBER,
   FieldType.TEXTAREA,
   FieldType.DROPDOWN,
+  FieldType.RATING,
   FieldType.FILE
 ];
 

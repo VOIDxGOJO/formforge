@@ -33,7 +33,7 @@ export const useLogin = () => {
       apiFetch('/api/v1/auth/login', { method: 'POST', body: JSON.stringify(body) }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
-      router.push('/dashboard');
+      router.push(nextPath());
     }
   });
 };
@@ -46,7 +46,16 @@ export const useRegister = () => {
       apiFetch('/api/v1/auth/register', { method: 'POST', body: JSON.stringify(body) }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
-      router.push('/dashboard');
+      router.push(nextPath());
     }
   });
 };
+
+// Where to go after signing in: the `next` query param, but only same-site paths.
+export const safeNextPath = (next: string | null): string =>
+  next && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\') ? next : '/dashboard';
+
+const nextPath = () =>
+  typeof window === 'undefined'
+    ? '/dashboard'
+    : safeNextPath(new URLSearchParams(window.location.search).get('next'));

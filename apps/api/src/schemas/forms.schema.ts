@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const fieldSchema = z.object({
   id: z.string(),
-  type: z.enum(['TEXT', 'EMAIL', 'NUMBER', 'TEXTAREA', 'DROPDOWN', 'FILE']),
+  type: z.enum(['TEXT', 'EMAIL', 'NUMBER', 'TEXTAREA', 'DROPDOWN', 'FILE', 'RATING']),
   label: z.string(),
   placeholder: z.string().optional(),
   required: z.boolean(),

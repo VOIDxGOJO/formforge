@@ -39,7 +39,11 @@ export const workspaceController = {
     sendSuccess(res, data, 201);
   },
   acceptInvite: async (req: Request, res: Response) => {
-    const data = await workspaceService.acceptInvite(req.user!.id, req.body.token);
+    const data = await workspaceService.acceptInvite(
+      req.user!.id,
+      req.params.workspaceId as string,
+      req.body.token
+    );
     sendSuccess(res, data);
   },
   removeMember: async (req: Request, res: Response) => {

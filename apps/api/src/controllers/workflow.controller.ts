@@ -51,6 +51,10 @@ export const workflowController = {
       req.params.workspaceId as string,
       req.params.formId as string
     );
+    const existing = await workflowRepository.findById(req.params.workflowId as string);
+    if (!existing || existing.formId !== req.params.formId) {
+      throw NotFoundError('Workflow not found');
+    }
     await workflowRepository.delete(req.params.workflowId as string);
     sendSuccess(res, { deleted: true });
   }

@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client';
-import type { FieldSchema } from '@formforge/types';
+import { RATING_MAX, RATING_MIN, type FieldSchema } from '@formforge/types';
 import { formRepository } from '../repositories/form.repository.js';
 import { submissionRepository } from '../repositories/submission.repository.js';
 import { formService } from './form.service.js';
@@ -7,17 +7,30 @@ import { workflowService } from './workflow.service.js';
 import { sseManager } from '../lib/sse-manager.js';
 import { NotFoundError, ValidationError } from '../lib/errors.js';
 import { prisma } from '../lib/prisma.js';
+import { toCsv } from '../lib/csv.js';
 
-const validateResponses = (fields: FieldSchema[], responses: Record<string, unknown>) => {
+export const validateResponses = (fields: FieldSchema[], responses: Record<string, unknown>) => {
   for (const field of fields) {
     const value = responses[field.id];
-    if (field.required && (value === undefined || value === null || value === '')) {
-      throw ValidationError(`Field "${field.label}" is required`);
+    const empty = value === undefined || value === null || value === '';
+    if (empty) {
+      if (field.required) throw ValidationError(`Field "${field.label}" is required`);
+      continue;
     }
-    if (field.type === 'EMAIL' && value && typeof value === 'string') {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        throw ValidationError(`Field "${field.label}" must be a valid email`);
+    if (field.type === 'EMAIL' && (typeof value !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))) {
+      throw ValidationError(`Field "${field.label}" must be a valid email`);
+    }
+    if (field.type === 'NUMBER' && !Number.isFinite(Number(value))) {
+      throw ValidationError(`Field "${field.label}" must be a number`);
+    }
+    if (field.type === 'RATING') {
+      const n = Number(value);
+      if (!Number.isInteger(n) || n < RATING_MIN || n > RATING_MAX) {
+        throw ValidationError(`Field "${field.label}" must be a rating from ${RATING_MIN} to ${RATING_MAX}`);
       }
+    }
+    if (field.type === 'DROPDOWN' && field.options && !field.options.some((o) => o.value === value)) {
+      throw ValidationError(`Field "${field.label}" must be one of the listed options`);
     }
   }
 };
@@ -89,12 +102,8 @@ export const submissionService = {
     const headers = ['submittedAt', ...fields.map((f) => f.label)];
     const rows = items.map((s) => {
       const responses = s.responses as Record<string, unknown>;
-      return [
-        s.submittedAt.toISOString(),
-        ...fields.map((f) => JSON.stringify(responses[f.id] ?? ''))
-      ];
+      return [s.submittedAt, ...fields.map((f) => responses[f.id])];
     });
-    const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
-    return csv;
+    return toCsv([headers, ...rows]);
   }
 };

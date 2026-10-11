@@ -17,11 +17,21 @@ export class ApiClientError extends Error {
 
 type RequestOptions = RequestInit & { skipAuthRedirect?: boolean };
 
-export async function apiFetch<T>(
-  path: string,
-  options: RequestOptions = {}
-): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, {
+// One refresh at a time: concurrent 401s wait for the same request.
+let refreshing: Promise<boolean> | null = null;
+
+const refreshSession = (): Promise<boolean> => {
+  refreshing ??= fetch(`${API_URL}/api/v1/auth/refresh`, { method: 'POST', credentials: 'include' })
+    .then((r) => r.ok)
+    .catch(() => false)
+    .finally(() => {
+      refreshing = null;
+    });
+  return refreshing;
+};
+
+const send = (path: string, options: RequestOptions) =>
+  fetch(`${API_URL}${path}`, {
     ...options,
     credentials: 'include',
     headers: {
@@ -30,11 +40,23 @@ export async function apiFetch<T>(
     }
   });
 
+export async function apiFetch<T>(
+  path: string,
+  options: RequestOptions = {}
+): Promise<T> {
+  // These answer 401 for bad credentials or a dead session; never refresh or redirect for them.
+  const isAuthCall = /^\/api\/v1\/auth\/(login|register|refresh|logout)\b/.test(path);
+  let res = await send(path, options);
+  if (res.status === 401 && !isAuthCall && (await refreshSession())) {
+    res = await send(path, options);
+  }
+
   const json = (await res.json()) as ApiResponse<T>;
 
   if (!res.ok || !json.success) {
-    if (res.status === 401 && !options.skipAuthRedirect && typeof window !== 'undefined') {
-      window.location.href = '/login';
+    if (res.status === 401 && !isAuthCall && !options.skipAuthRedirect && typeof window !== 'undefined') {
+      const next = window.location.pathname + window.location.search;
+      window.location.href = `/login?next=${encodeURIComponent(next)}`;
     }
     const err = !json.success ? json.error : { code: 'UNKNOWN', message: 'Request failed' };
     throw new ApiClientError(err.code, err.message, res.status, err.details);

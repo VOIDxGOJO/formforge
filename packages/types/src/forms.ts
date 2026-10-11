@@ -4,8 +4,13 @@ export enum FieldType {
   NUMBER = 'NUMBER',
   TEXTAREA = 'TEXTAREA',
   DROPDOWN = 'DROPDOWN',
-  FILE = 'FILE'
+  FILE = 'FILE',
+  RATING = 'RATING'
 }
+
+/** RATING fields use a fixed 1-5 scale. */
+export const RATING_MIN = 1;
+export const RATING_MAX = 5;
 
 export type FieldOption = {
   label: string;
