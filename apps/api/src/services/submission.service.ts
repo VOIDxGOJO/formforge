@@ -45,11 +45,32 @@ export const submissionService = {
     if (!form || !form.isActive) throw NotFoundError('Form not found');
     const fields = form.fields as FieldSchema[];
     validateResponses(fields, responses);
+    const result = await submissionService.record(form, { responses, ...meta });
+    if ((form.adaptiveConfig as { enabled?: boolean } | null)?.enabled) {
+      // Lazy import: adaptive.service depends on this module.
+      void import('./adaptive.service.js').then((m) => m.adaptiveService.maybeRefit(form.id));
+    }
+    return result;
+  },
+
+  /** Stores a submission, runs the form's workflows and pushes the live count. */
+  record: async (
+    form: { id: string; workspaceId: string },
+    data: {
+      responses: Record<string, unknown>;
+      imputed?: Record<string, unknown>;
+      sessionId?: string;
+      ipAddress?: string;
+      userAgent?: string;
+    }
+  ) => {
     const submission = await submissionRepository.create({
       formId: form.id,
-      responses: responses as Prisma.InputJsonValue,
-      ipAddress: meta.ipAddress,
-      userAgent: meta.userAgent
+      responses: data.responses as Prisma.InputJsonValue,
+      ...(data.imputed ? { imputed: data.imputed as Prisma.InputJsonValue } : {}),
+      sessionId: data.sessionId,
+      ipAddress: data.ipAddress,
+      userAgent: data.userAgent
     });
     await workflowService.processSubmissionWorkflows(form.id, submission);
     const count = await prisma.submission.count({ where: { formId: form.id } });
