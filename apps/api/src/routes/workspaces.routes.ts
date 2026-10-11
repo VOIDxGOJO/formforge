@@ -57,7 +57,6 @@ workspacesRouter.post(
   '/:workspaceId/accept-invite',
   validate(workspaceIdParamsSchema, 'params'),
   validate(acceptInviteSchema),
-  authenticate,
   asyncHandler(workspaceController.acceptInvite)
 );
 workspacesRouter.delete(

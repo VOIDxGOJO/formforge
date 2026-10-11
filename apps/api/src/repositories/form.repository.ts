@@ -26,11 +26,8 @@ export const formRepository = {
       prisma.form.count({ where })
     ]);
   },
-  create: (data: { workspaceId: string; name: string; slug: string }) =>
+  create: (data: { workspaceId: string; name: string; slug: string; objective?: string }) =>
     prisma.form.create({ data }),
-  update: (
-    id: string,
-    data: Partial<{ name: string; fields: Prisma.InputJsonValue; isActive: boolean }>
-  ) => prisma.form.update({ where: { id }, data }),
+  update: (id: string, data: Prisma.FormUpdateInput) => prisma.form.update({ where: { id }, data }),
   delete: (id: string) => prisma.form.delete({ where: { id } })
 };

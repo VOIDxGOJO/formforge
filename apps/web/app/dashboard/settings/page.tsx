@@ -31,6 +31,7 @@ export default function SettingsPage() {
   const queryClient = useQueryClient();
   const [name, setName] = useState('');
   const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteRole, setInviteRole] = useState<'ADMIN' | 'MEMBER' | 'VIEWER'>('MEMBER');
 
   const workspace = useQuery({
     queryKey: ['workspace', workspaceId],
@@ -57,7 +58,7 @@ export default function SettingsPage() {
     mutationFn: () =>
       apiFetch(`/api/v1/workspaces/${workspaceId}/invite`, {
         method: 'POST',
-        body: JSON.stringify({ email: inviteEmail, role: 'MEMBER' })
+        body: JSON.stringify({ email: inviteEmail, role: inviteRole })
       }),
     onSuccess: () => {
       setInviteEmail('');
@@ -112,7 +113,17 @@ export default function SettingsPage() {
               value={inviteEmail}
               onChange={(e) => setInviteEmail(e.target.value)}
             />
-            <Button onClick={() => invite.mutate()} disabled={!inviteEmail}>
+            <select
+              aria-label="Role"
+              value={inviteRole}
+              onChange={(e) => setInviteRole(e.target.value as typeof inviteRole)}
+              className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+            >
+              <option value="ADMIN">Admin</option>
+              <option value="MEMBER">Member</option>
+              <option value="VIEWER">Viewer</option>
+            </select>
+            <Button onClick={() => invite.mutate()} disabled={!inviteEmail || invite.isPending}>
               <UserPlus className="mr-2 h-4 w-4" />
               Invite
             </Button>

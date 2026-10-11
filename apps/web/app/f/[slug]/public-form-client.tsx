@@ -1,8 +1,9 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import type { FieldSchema } from '@formforge/types';
+import type { PublicFormConfig } from '@formforge/types';
 import { PublicForm } from '@/components/form-renderer/PublicForm';
+import { AdaptiveForm } from '@/components/form-renderer/AdaptiveForm';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 
@@ -15,7 +16,7 @@ export function PublicFormClient({ slug }: { slug: string }) {
       const res = await fetch(`${API_URL}/api/public/forms/${slug}`);
       const json = await res.json();
       if (!json.success) throw new Error(json.error?.message ?? 'Failed to load form');
-      return json.data as { name: string; fields: FieldSchema[] };
+      return json.data as PublicFormConfig;
     }
   });
 
@@ -28,5 +29,9 @@ export function PublicFormClient({ slug }: { slug: string }) {
       </div>
     );
 
-  return <PublicForm slug={slug} name={data!.name} fields={data!.fields} />;
+  return data!.adaptive ? (
+    <AdaptiveForm slug={slug} name={data!.name} />
+  ) : (
+    <PublicForm slug={slug} name={data!.name} fields={data!.fields} />
+  );
 }

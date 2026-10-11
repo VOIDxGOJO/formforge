@@ -9,9 +9,10 @@ export const updateWorkspaceSchema = z.object({
   name: z.string().min(2).max(100)
 });
 
+// Ownership is never granted through an invite; only one OWNER exists per workspace.
 export const inviteSchema = z.object({
   email: z.string().email(),
-  role: z.nativeEnum(Role).default(Role.MEMBER)
+  role: z.enum([Role.ADMIN, Role.MEMBER, Role.VIEWER]).default(Role.MEMBER)
 });
 
 export const acceptInviteSchema = z.object({

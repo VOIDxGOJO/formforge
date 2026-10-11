@@ -1,0 +1,776 @@
+{
+ "source": "report_work/experiments/quality_eval.py (report Table 7.9)",
+ "questions": [
+  {
+   "label": "How satisfied were you with your mentor and your project?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": []
+  },
+  {
+   "label": "How would you rate the speed and accuracy of the support team?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": [
+    "DOUBLE_BARRELLED"
+   ]
+  },
+  {
+   "label": "Was the course content relevant and up to date?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": []
+  },
+  {
+   "label": "Do you find the app easy to use and visually appealing?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": [
+    "DOUBLE_BARRELLED"
+   ]
+  },
+  {
+   "label": "How clear were the instructions and the deadlines?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": []
+  },
+  {
+   "label": "Rate the food and the cleanliness of the hostel mess.",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": []
+  },
+  {
+   "label": "Did your manager give you feedback and recognition?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": [
+    "DOUBLE_BARRELLED"
+   ]
+  },
+  {
+   "label": "How satisfied are you with your salary and benefits?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": [
+    "DOUBLE_BARRELLED"
+   ]
+  },
+  {
+   "label": "Was the workshop informative and well organised?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": [
+    "DOUBLE_BARRELLED"
+   ]
+  },
+  {
+   "label": "How do you rate the library's timings and book collection?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": [
+    "DOUBLE_BARRELLED"
+   ]
+  },
+  {
+   "label": "Should the college improve Wi-Fi and extend lab hours?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": [
+    "DOUBLE_BARRELLED"
+   ]
+  },
+  {
+   "label": "Were the trainers knowledgeable and approachable?",
+   "issues": [
+    "DOUBLE_BARRELLED"
+   ],
+   "pythonFlags": [
+    "DOUBLE_BARRELLED"
+   ]
+  },
+  {
+   "label": "How much did you enjoy our excellent service?",
+   "issues": [
+    "LEADING"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS",
+    "LEADING"
+   ]
+  },
+  {
+   "label": "Don't you agree that the new timetable is better?",
+   "issues": [
+    "LEADING"
+   ],
+   "pythonFlags": [
+    "LEADING"
+   ]
+  },
+  {
+   "label": "How helpful was our friendly support staff?",
+   "issues": [
+    "LEADING"
+   ],
+   "pythonFlags": [
+    "LEADING"
+   ]
+  },
+  {
+   "label": "Most students say the placement cell is very active. Do you agree?",
+   "issues": [
+    "LEADING"
+   ],
+   "pythonFlags": [
+    "LEADING"
+   ]
+  },
+  {
+   "label": "How great was the guest lecture?",
+   "issues": [
+    "LEADING"
+   ],
+   "pythonFlags": [
+    "LEADING"
+   ]
+  },
+  {
+   "label": "Wouldn't you say the canteen prices are fair?",
+   "issues": [
+    "AMBIGUOUS",
+    "LEADING"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS",
+    "LEADING"
+   ]
+  },
+  {
+   "label": "How amazing was the hackathon experience?",
+   "issues": [
+    "LEADING"
+   ],
+   "pythonFlags": [
+    "LEADING"
+   ]
+  },
+  {
+   "label": "Do you agree that remote work improves productivity?",
+   "issues": [
+    "LEADING"
+   ],
+   "pythonFlags": [
+    "LEADING"
+   ]
+  },
+  {
+   "label": "How much did you love the new dashboard?",
+   "issues": [
+    "LEADING"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS",
+    "LEADING"
+   ]
+  },
+  {
+   "label": "Obviously the lab equipment is outdated; how often does it fail?",
+   "issues": [
+    "AMBIGUOUS",
+    "LEADING"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS",
+    "LEADING"
+   ]
+  },
+  {
+   "label": "Was the internship experience good?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "Do you exercise regularly?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "How often do you use the library?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "Did you get enough support during the project?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "Was the hostel food okay?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "Do you attend classes properly?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "How much time do you spend on social media?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "Have you visited the career fair recently?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "Is the fee structure reasonable?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "Was the event fine overall?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "Do you sleep enough?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "Do you often feel stressed before exams?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "Was the response time of the website decent?",
+   "issues": [
+    "AMBIGUOUS"
+   ],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "How many hours per week did you work on the project?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "What is your current year of study?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "Which programming language did you use most in the last 6 months?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "On a scale of 1 to 5, how satisfied were you with the internship?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How many times did you meet your mentor in the last 30 days?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "What is your department?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "Please enter your registered email address.",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "What was the duration of your internship in weeks?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "Which city did you intern in?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How likely are you to recommend this course to a friend, on a scale of 0 to 10?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "In the past 7 days, how many hours did you sleep per night on average?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "What is the name of your project guide?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "Which of the following tools did you use? Select all that apply.",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How would you rate the clarity of the assignment instructions?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How would you rate the usefulness of the mentor's feedback?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How many lab sessions did you attend this semester?",
+   "issues": [],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "What was your CGPA in the previous semester?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "Did you receive a pre-placement offer?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "Which work mode did you follow: remote, hybrid or on-site?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "What is the main reason you chose this elective?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How satisfied are you with the speed of the campus Wi-Fi?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How many days did it take to get your certificate issued?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "Which topic from the course was most useful to you?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "What should be improved in the next version of the workshop?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How would you rate the difficulty of the final exam?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "Rate the comfort of the classroom seating.",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How long did it take to complete the registration form, in minutes?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "Did the mentor attend the weekly review meetings?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How many members were in your project team?",
+   "issues": [],
+   "pythonFlags": [
+    "AMBIGUOUS"
+   ]
+  },
+  {
+   "label": "What is your preferred contact time?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How would you rate the punctuality of the shuttle bus?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "Which payment method did you use for the fee?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "How useful was the orientation session for understanding the curriculum?",
+   "issues": [],
+   "pythonFlags": [
+    "LEADING"
+   ]
+  },
+  {
+   "label": "How easy was it to find the exam schedule on the portal?",
+   "issues": [],
+   "pythonFlags": []
+  },
+  {
+   "label": "What is one thing you would change about the hostel?",
+   "issues": [],
+   "pythonFlags": []
+  }
+ ],
+ "pairs": [
+  {
+   "a": "How satisfied were you with the internship?",
+   "b": "How happy were you with the internship?",
+   "redundant": true,
+   "pythonSimilarity": 1.0
+  },
+  {
+   "a": "How satisfied were you with the internship?",
+   "b": "How would you rate your satisfaction with the internship?",
+   "redundant": true,
+   "pythonSimilarity": 1.0
+  },
+  {
+   "a": "How useful was your mentor's feedback?",
+   "b": "How helpful was the feedback given by your mentor?",
+   "redundant": true,
+   "pythonSimilarity": 0.5
+  },
+  {
+   "a": "How many hours did you work per week?",
+   "b": "What were your weekly working hours?",
+   "redundant": true,
+   "pythonSimilarity": 0.75
+  },
+  {
+   "a": "Would you recommend this course to a friend?",
+   "b": "How likely are you to recommend this course to others?",
+   "redundant": true,
+   "pythonSimilarity": 1.0
+  },
+  {
+   "a": "How easy was the portal to use?",
+   "b": "How simple was it to use the portal?",
+   "redundant": true,
+   "pythonSimilarity": 1.0
+  },
+  {
+   "a": "How clear were the assignment instructions?",
+   "b": "How understandable were the instructions for the assignment?",
+   "redundant": true,
+   "pythonSimilarity": 1.0
+  },
+  {
+   "a": "Rate the quality of the hostel food.",
+   "b": "How good was the food served in the hostel?",
+   "redundant": true,
+   "pythonSimilarity": 1.0
+  },
+  {
+   "a": "How satisfied are you with the campus Wi-Fi speed?",
+   "b": "How fast is the Wi-Fi on campus?",
+   "redundant": true,
+   "pythonSimilarity": 0.75
+  },
+  {
+   "a": "Did you face any problems during registration?",
+   "b": "Were there any issues while registering?",
+   "redundant": true,
+   "pythonSimilarity": 0.4
+  },
+  {
+   "a": "How difficult was the final exam?",
+   "b": "How hard did you find the final examination?",
+   "redundant": true,
+   "pythonSimilarity": 1.0
+  },
+  {
+   "a": "How satisfied were you with the internship?",
+   "b": "How many hours did you work per week?",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "How useful was your mentor's feedback?",
+   "b": "Which city did you intern in?",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "What is your department?",
+   "b": "How many members were in your project team?",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "How clear were the assignment instructions?",
+   "b": "How difficult was the final exam?",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "Rate the quality of the hostel food.",
+   "b": "How satisfied are you with the campus Wi-Fi speed?",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "How easy was the portal to use?",
+   "b": "Did you receive a pre-placement offer?",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "Would you recommend this course to a friend?",
+   "b": "What was your CGPA in the previous semester?",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "How often did you meet your mentor?",
+   "b": "How useful was your mentor's feedback?",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "How many hours did you work per week?",
+   "b": "How manageable was your workload?",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "How satisfied were you with the stipend?",
+   "b": "How satisfied were you with the internship?",
+   "redundant": false,
+   "pythonSimilarity": 0.333333
+  },
+  {
+   "a": "What is your preferred contact time?",
+   "b": "Please enter your registered email address.",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "How punctual was the shuttle bus?",
+   "b": "How comfortable was the classroom seating?",
+   "redundant": false,
+   "pythonSimilarity": 0.0
+  },
+  {
+   "a": "Which programming language did you use most?",
+   "b": "Which tools did you use in the project?",
+   "redundant": false,
+   "pythonSimilarity": 0.166667
+  }
+ ],
+ "expected": {
+  "double_barrelled": {
+   "precision": 1.0,
+   "recall": 0.667,
+   "f1": 0.8,
+   "tp": 8,
+   "fp": 0,
+   "fn": 4
+  },
+  "leading": {
+   "precision": 0.909,
+   "recall": 1.0,
+   "f1": 0.952,
+   "tp": 10,
+   "fp": 1,
+   "fn": 0
+  },
+  "ambiguous": {
+   "precision": 0.789,
+   "recall": 1.0,
+   "f1": 0.882,
+   "tp": 15,
+   "fp": 4,
+   "fn": 0
+  },
+  "any_issue": {
+   "precision": 0.912,
+   "recall": 0.886,
+   "f1": 0.899,
+   "tp": 31,
+   "fp": 3,
+   "fn": 4,
+   "accuracy": 0.9
+  }
+ },
+ "redundancyThreshold": 0.4,
+ "expectedRedundancyAt04": {
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "tp": 11,
+  "fp": 0,
+  "fn": 0
+ },
+ "demoForm": [
+  {
+   "type": "DROPDOWN",
+   "label": "Which department did you intern in?",
+   "flesch": 73.8
+  },
+  {
+   "type": "DROPDOWN",
+   "label": "How long was your internship?",
+   "flesch": 83.3
+  },
+  {
+   "type": "RATING",
+   "label": "Overall, how satisfied were you with the internship?",
+   "flesch": 50.7
+  },
+  {
+   "type": "DROPDOWN",
+   "label": "How often did you meet your mentor?",
+   "flesch": 91.0
+  },
+  {
+   "type": "RATING",
+   "label": "How useful was the feedback from your mentor?",
+   "flesch": 71.8
+  },
+  {
+   "type": "RATING",
+   "label": "How well did your tasks match your skills?",
+   "flesch": 114.1
+  },
+  {
+   "type": "RATING",
+   "label": "How would you rate your satisfaction with the internship?",
+   "flesch": 66.1
+  },
+  {
+   "type": "DROPDOWN",
+   "label": "How many hours did you work in a typical week?",
+   "flesch": 86.7
+  },
+  {
+   "type": "RATING",
+   "label": "How manageable was your workload?",
+   "flesch": 66.4
+  },
+  {
+   "type": "RATING",
+   "label": "How much did you improve technically?",
+   "flesch": 59.7
+  },
+  {
+   "type": "RATING",
+   "label": "How adequate were the tools and systems you were given?",
+   "flesch": 78.2
+  },
+  {
+   "type": "RATING",
+   "label": "How clear was communication inside your team?",
+   "flesch": 54.7
+  },
+  {
+   "type": "DROPDOWN",
+   "label": "Would you recommend this internship to a junior?",
+   "flesch": 61.2
+  },
+  {
+   "type": "DROPDOWN",
+   "label": "Would you accept a pre-placement offer from this company?",
+   "flesch": 61.3
+  },
+  {
+   "type": "DROPDOWN",
+   "label": "What was your work mode?",
+   "flesch": 117.2
+  },
+  {
+   "type": "RATING",
+   "label": "How fair was the stipend for the work done?",
+   "flesch": 103.7
+  },
+  {
+   "type": "TEXTAREA",
+   "label": "What should the company improve for the next batch of interns?",
+   "flesch": 80.3
+  }
+ ]
+}

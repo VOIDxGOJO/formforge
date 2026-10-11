@@ -1,5 +1,8 @@
 import { resend, fromEmail } from '../lib/resend.js';
 
+const escapeHtml = (text: string) =>
+  text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c);
+
 export const emailService = {
   send: async (to: string, subject: string, html: string) => {
     if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 're_test_key') {
@@ -13,7 +16,7 @@ export const emailService = {
     emailService.send(
       to,
       `You've been invited to ${workspaceName} on FormForge`,
-      `<p>You have been invited to join <strong>${workspaceName}</strong>.</p>
+      `<p>You have been invited to join <strong>${escapeHtml(workspaceName)}</strong>.</p>
        <p><a href="${inviteUrl}">Accept invitation</a></p>`
     ),
 

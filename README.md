@@ -36,7 +36,7 @@ Most form builders are either pretty demos or over-engineered microservices. **F
 
 ### For teams
 - **Multi-tenant workspaces** — isolated data, team invites, role-based access
-- **Form builder** — text, email, number, textarea, dropdown, file fields with undo/redo
+- **Form builder** — text, email, number, textarea, dropdown, rating and file fields with undo/redo
 - **Public forms** — shareable `/f/your-slug` pages, no login required
 
 ### For builders
@@ -44,6 +44,13 @@ Most form builders are either pretty demos or over-engineered microservices. **F
 - **Webhook reliability** — DB-backed delivery log, exponential backoff, dead-letter after 5 attempts
 - **Real-time dashboard** — SSE pushes new submission counts without polling
 - **Analytics** — 30-day volume chart, per-form breakdown, active workflow stats
+
+### FormForge 2.0: form intelligence
+- **AI form generation** — describe the form in plain words and get an editable draft with question metadata (objective, information target, time, relevance)
+- **Quality analyzer** — checks for double-barrelled, leading, ambiguous and redundant questions, readability, the share of required questions, form length and objective coverage, with a 0–100 score and time estimate, plus an optional AI review
+- **Adaptive mode** — one question at a time; a latent class model picks the most informative next question and stops when coverage is reached, predicting the skipped answers with a confidence
+- **Synthetic warm start** — AI personas answer a new form so adaptive mode works from the first respondent; their weight fades as real responses arrive and they never appear as data
+- **Response insights** — summary, topics, sentiment and groups of similar answers for open text, computed in the background on answers whose personal details are masked first
 
 ### For engineers
 - **Clean architecture** — routes → controllers → services → repositories
@@ -62,10 +69,11 @@ Most form builders are either pretty demos or over-engineered microservices. **F
 │  apps/web   │     SSE (live count)   │  apps/api   │                └────────────┘
 └─────────────┘                        └──────┬──────┘
                                               │
-                         ┌────────────────────┼────────────────────┐
-                         ▼                    ▼                    ▼
-                    Resend Email        S3 Presign           Webhook + Cron
-                    (invites, flows)    (file uploads)       (retry job)
+                         ┌──────────────────┬─┴────────────────┬──────────────────┐
+                         ▼                  ▼                  ▼                  ▼
+                    Resend Email       S3 Presign        Webhook + Cron      AI provider
+                    (invites, flows)   (file uploads)    (retry job)         (Gemini / OpenAI /
+                                                                              Ollama, redacted text)
 ```
 
 ### Monorepo layout
@@ -73,7 +81,7 @@ Most form builders are either pretty demos or over-engineered microservices. **F
 | Package | Role |
 |---------|------|
 | [`apps/web`](apps/web) | Next.js 14 dashboard, builder, public form renderer |
-| [`apps/api`](apps/api) | Express API, Prisma, workflows, webhooks, SSE |
+| [`apps/api`](apps/api) | Express API, Prisma, workflows, webhooks, SSE, adaptive engine (`src/engine`), AI services |
 | [`packages/types`](packages/types) | Shared TypeScript API contracts |
 
 ---
@@ -105,6 +113,10 @@ copy apps\web\.env.local.example apps\web\.env.local
 ```
 
 Default values work for local dev. Change JWT secrets before any public deployment.
+
+The AI features need a model provider. The default is the **Google Gemini free tier**: create a key at
+[aistudio.google.com/apikey](https://aistudio.google.com/apikey) and set `AI_API_KEY` in `apps/api/.env`.
+Everything else in FormForge works without it.
 
 ### 3. Database
 
@@ -142,6 +154,8 @@ npm run dev:web
 | `npm run setup` | Install + Postgres + migrate (first-time) |
 | `npm run build` | Production build (all packages) |
 | `npm run typecheck` | TypeScript strict check |
+| `npm test` | Unit tests (rules, engine parity, redactor, providers, …) |
+| `npm run test:functional -w @formforge/api` | 29 API tests against a real `<db>_test` database (needs `npm run db:up`) |
 
 ---
 
@@ -160,6 +174,10 @@ npm run dev:web
 | `AWS_*` | S3 presigned file uploads |
 | `CORS_ORIGIN` | Frontend URL (e.g. `http://localhost:3000`) |
 | `PORT` | API port (default `3001`) |
+| `AI_PROVIDER` | `gemini` (default), `openai` or `ollama` |
+| `AI_API_KEY` | Key for the AI provider (not needed for Ollama) |
+| `AI_MODEL` / `AI_EMBED_MODEL` | Override the chat and embedding models |
+| `AI_BASE_URL` | Any other OpenAI-compatible endpoint |
 
 </details>
 

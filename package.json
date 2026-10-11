@@ -16,7 +16,8 @@
     "db:migrate": "npm run prisma:migrate --workspace=@formforge/api",
     "setup": "npm install && npm run db:up && npm run db:migrate",
     "lint": "turbo lint",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "test": "turbo test"
   },
   "devDependencies": {
     "turbo": "^2.5.3",

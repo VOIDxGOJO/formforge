@@ -5,6 +5,8 @@ export const submissionRepository = {
   create: (data: {
     formId: string;
     responses: Prisma.InputJsonValue;
+    imputed?: Prisma.InputJsonValue;
+    sessionId?: string;
     ipAddress?: string;
     userAgent?: string;
   }) => prisma.submission.create({ data }),

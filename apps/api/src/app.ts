@@ -11,6 +11,10 @@ import { formsRouter } from './routes/forms.routes.js';
 import { publicRouter } from './routes/public.routes.js';
 import { uploadsRouter } from './routes/uploads.routes.js';
 import { sseRouter } from './routes/sse.routes.js';
+import { aiFormsRouter } from './routes/ai-form.routes.js';
+import { formQualityRouter, qualityRouter } from './routes/quality.routes.js';
+import { adaptiveRouter, publicAdaptiveRouter, simulateRouter } from './routes/adaptive.routes.js';
+import { insightsRouter } from './routes/insights.routes.js';
 import { globalRateLimiter } from './middleware/rate-limit.js';
 import { notFoundHandler } from './middleware/not-found.js';
 import { errorHandler } from './middleware/error-handler.js';
@@ -37,9 +41,9 @@ export const createApp = (): express.Application => {
       credentials: true
     })
   );
-  app.use(
-    morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev')
-  );
+  if (process.env.NODE_ENV !== 'test') {
+    app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+  }
   app.use(cookieParser());
   app.use(express.json({ limit: '2mb' }));
   app.use(globalRateLimiter);
@@ -57,13 +61,20 @@ export const createApp = (): express.Application => {
   });
   app.use('/api/v1/auth', authRouter);
   app.use('/api/v1/workspaces', workspacesRouter);
+  app.use('/api/v1/workspaces/:workspaceId/forms/:formId/quality', formQualityRouter);
+  app.use('/api/v1/workspaces/:workspaceId/quality', qualityRouter);
+  app.use('/api/v1/workspaces/:workspaceId/forms/:formId/adaptive', adaptiveRouter);
+  app.use('/api/v1/workspaces/:workspaceId/forms/:formId/simulate', simulateRouter);
+  app.use('/api/v1/workspaces/:workspaceId/forms/:formId/insights', insightsRouter);
   app.use(
     '/api/v1/workspaces/:workspaceId/forms',
     formsRouter
   );
+  app.use('/api/v1/workspaces/:workspaceId/ai/forms', aiFormsRouter);
   app.use('/api/v1/uploads', uploadsRouter);
   app.use('/api/v1/sse', sseRouter);
   app.use('/api/public', publicRouter);
+  app.use('/api/public', publicAdaptiveRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

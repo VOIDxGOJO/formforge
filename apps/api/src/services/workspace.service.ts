@@ -49,14 +49,14 @@ export const workspaceService = {
     await emailService.sendInvite(
       email,
       workspace?.name ?? 'Workspace',
-      `${appUrl}/accept-invite?token=${token}`
+      `${appUrl}/accept-invite?workspace=${workspaceId}&token=${token}`
     );
     return { email, role, invitedBy: inviterName };
   },
 
-  acceptInvite: async (userId: string, token: string) => {
+  acceptInvite: async (userId: string, workspaceId: string, token: string) => {
     const invite = await inviteTokenRepository.findByToken(token);
-    if (!invite || invite.usedAt || invite.expiresAt < new Date()) {
+    if (!invite || invite.workspaceId !== workspaceId || invite.usedAt || invite.expiresAt < new Date()) {
       throw NotFoundError('Invalid or expired invite');
     }
     const user = await userRepository.findById(userId);
