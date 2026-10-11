@@ -85,6 +85,9 @@ export default function FormsPage() {
                     <Link href={`/dashboard/forms/${form.id}/responses`}>Responses</Link>
                   </Button>
                   <Button asChild size="sm" variant="outline">
+                    <Link href={`/dashboard/forms/${form.id}/insights`}>Insights</Link>
+                  </Button>
+                  <Button asChild size="sm" variant="outline">
                     <Link href={`/dashboard/forms/${form.id}/settings`}>Settings</Link>
                   </Button>
                   <Button asChild size="sm" variant="ghost">

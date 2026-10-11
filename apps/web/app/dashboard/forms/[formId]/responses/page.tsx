@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api';
@@ -71,6 +72,9 @@ export default function ResponsesPage() {
         <div className="flex gap-2">
           <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
           <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          <Button asChild variant="outline">
+            <Link href={`/dashboard/forms/${formId}/insights`}>Insights</Link>
+          </Button>
           <Button variant="outline" onClick={exportCsv}>
             Export CSV
           </Button>

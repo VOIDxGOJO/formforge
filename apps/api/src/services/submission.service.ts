@@ -8,6 +8,7 @@ import { sseManager } from '../lib/sse-manager.js';
 import { NotFoundError, ValidationError } from '../lib/errors.js';
 import { prisma } from '../lib/prisma.js';
 import { toCsv } from '../lib/csv.js';
+import { insightService } from './insights/insight.service.js';
 
 export const validateResponses = (fields: FieldSchema[], responses: Record<string, unknown>) => {
   for (const field of fields) {
@@ -79,6 +80,8 @@ export const submissionService = {
       formId: form.id,
       count
     });
+    // Insights refresh in the background after every 20 new submissions.
+    void insightService.maybeRefresh(form.id).catch(() => undefined);
     return { id: submission.id, message: 'Submission received' };
   },
 

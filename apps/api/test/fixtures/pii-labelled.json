@@ -1,0 +1,410 @@
+{
+ "source": "report_work/experiments/quality_eval.py PII_SET",
+ "overall": {
+  "precision": 0.952,
+  "recall": 0.87,
+  "f1": 0.909,
+  "tp": 20,
+  "fp": 1,
+  "fn": 3
+ },
+ "sentences": [
+  {
+   "text": "My mentor Ravi Kumar was very supportive.",
+   "gold": [
+    [
+     "PERSON",
+     "Ravi Kumar"
+    ]
+   ],
+   "python_found": [
+    [
+     "PERSON",
+     "Ravi Kumar"
+    ]
+   ],
+   "python_output": "My mentor [PERSON] was very supportive."
+  },
+  {
+   "text": "Contact me at priya.sharma@gmail.com for details.",
+   "gold": [
+    [
+     "EMAIL",
+     "priya.sharma@gmail.com"
+    ]
+   ],
+   "python_found": [
+    [
+     "EMAIL",
+     "priya.sharma@gmail.com"
+    ]
+   ],
+   "python_output": "Contact me at [EMAIL] for details."
+  },
+  {
+   "text": "Call 9876543210 if the form breaks.",
+   "gold": [
+    [
+     "PHONE",
+     "9876543210"
+    ]
+   ],
+   "python_found": [
+    [
+     "PHONE",
+     "9876543210"
+    ]
+   ],
+   "python_output": "Call [PHONE] if the form breaks."
+  },
+  {
+   "text": "My number is +91 98450 12345.",
+   "gold": [
+    [
+     "PHONE",
+     "+91 98450 12345"
+    ]
+   ],
+   "python_found": [
+    [
+     "PHONE",
+     "+91 98450 12345"
+    ]
+   ],
+   "python_output": "My number is [PHONE]."
+  },
+  {
+   "text": "The repo is at https://github.com/demo/project",
+   "gold": [
+    [
+     "URL",
+     "https://github.com/demo/project"
+    ]
+   ],
+   "python_found": [
+    [
+     "URL",
+     "https://github.com/demo/project"
+    ]
+   ],
+   "python_output": "The repo is at [URL]"
+  },
+  {
+   "text": "Server IP was 192.168.1.20 during testing.",
+   "gold": [
+    [
+     "IP",
+     "192.168.1.20"
+    ]
+   ],
+   "python_found": [
+    [
+     "IP",
+     "192.168.1.20"
+    ]
+   ],
+   "python_output": "Server IP was [IP] during testing."
+  },
+  {
+   "text": "Aadhaar 1234 5678 9012 was asked at joining.",
+   "gold": [
+    [
+     "AADHAAR",
+     "1234 5678 9012"
+    ]
+   ],
+   "python_found": [
+    [
+     "AADHAAR",
+     "1234 5678 9012"
+    ]
+   ],
+   "python_output": "Aadhaar [AADHAAR] was asked at joining."
+  },
+  {
+   "text": "PAN ABCDE1234F submitted to HR.",
+   "gold": [
+    [
+     "PAN",
+     "ABCDE1234F"
+    ]
+   ],
+   "python_found": [
+    [
+     "PAN",
+     "ABCDE1234F"
+    ]
+   ],
+   "python_output": "PAN [PAN] submitted to HR."
+  },
+  {
+   "text": "I am Ananya Iyer from the IT department.",
+   "gold": [
+    [
+     "PERSON",
+     "Ananya Iyer"
+    ]
+   ],
+   "python_found": [
+    [
+     "PERSON",
+     "Ananya Iyer"
+    ]
+   ],
+   "python_output": "I am [PERSON] from the IT department."
+  },
+  {
+   "text": "Dr. Meena helped me with the report.",
+   "gold": [
+    [
+     "PERSON",
+     "Meena"
+    ]
+   ],
+   "python_found": [
+    [
+     "PERSON",
+     "Meena"
+    ]
+   ],
+   "python_output": "Dr. [PERSON] helped me with the report."
+  },
+  {
+   "text": "Workload was too high in the last two weeks.",
+   "gold": [],
+   "python_found": [],
+   "python_output": "Workload was too high in the last two weeks."
+  },
+  {
+   "text": "The canteen closes at 9 pm, which is too early.",
+   "gold": [],
+   "python_found": [],
+   "python_output": "The canteen closes at 9 pm, which is too early."
+  },
+  {
+   "text": "Version 2.4.1 of the app crashed twice.",
+   "gold": [],
+   "python_found": [],
+   "python_output": "Version 2.4.1 of the app crashed twice."
+  },
+  {
+   "text": "Need more sessions on cloud computing.",
+   "gold": [],
+   "python_found": [],
+   "python_output": "Need more sessions on cloud computing."
+  },
+  {
+   "text": "My register number is 23MCA1045.",
+   "gold": [
+    [
+     "REGNO",
+     "23MCA1045"
+    ]
+   ],
+   "python_found": [
+    [
+     "REGNO",
+     "23MCA1045"
+    ]
+   ],
+   "python_output": "My register number is [REGNO]."
+  },
+  {
+   "text": "Email hr@company.co.in or call 080-41234567.",
+   "gold": [
+    [
+     "EMAIL",
+     "hr@company.co.in"
+    ],
+    [
+     "PHONE",
+     "080-41234567"
+    ]
+   ],
+   "python_found": [
+    [
+     "EMAIL",
+     "hr@company.co.in"
+    ]
+   ],
+   "python_output": "Email [EMAIL] or call 080-41234567."
+  },
+  {
+   "text": "Prof. Suresh Babu takes the cloud lab.",
+   "gold": [
+    [
+     "PERSON",
+     "Suresh Babu"
+    ]
+   ],
+   "python_found": [
+    [
+     "PERSON",
+     "Suresh Babu"
+    ]
+   ],
+   "python_output": "Prof. [PERSON] takes the cloud lab."
+  },
+  {
+   "text": "Manager Kavya never replied to my mails.",
+   "gold": [
+    [
+     "PERSON",
+     "Kavya"
+    ]
+   ],
+   "python_found": [
+    [
+     "PERSON",
+     "Kavya"
+    ]
+   ],
+   "python_output": "Manager [PERSON] never replied to my mails."
+  },
+  {
+   "text": "Room 204 projector does not work.",
+   "gold": [],
+   "python_found": [],
+   "python_output": "Room 204 projector does not work."
+  },
+  {
+   "text": "Shared the doc on www.notion.so/team-page yesterday.",
+   "gold": [
+    [
+     "URL",
+     "www.notion.so/team-page"
+    ]
+   ],
+   "python_found": [
+    [
+     "URL",
+     "www.notion.so/team-page"
+    ]
+   ],
+   "python_output": "Shared the doc on [URL] yesterday."
+  },
+  {
+   "text": "The stipend of 15000 per month was paid late.",
+   "gold": [],
+   "python_found": [],
+   "python_output": "The stipend of 15000 per month was paid late."
+  },
+  {
+   "text": "I worked with Rahul on the backend.",
+   "gold": [
+    [
+     "PERSON",
+     "Rahul"
+    ]
+   ],
+   "python_found": [],
+   "python_output": "I worked with Rahul on the backend."
+  },
+  {
+   "text": "Reach me on 7012345678 or at a.k@vit.ac.in",
+   "gold": [
+    [
+     "PHONE",
+     "7012345678"
+    ],
+    [
+     "EMAIL",
+     "a.k@vit.ac.in"
+    ]
+   ],
+   "python_found": [
+    [
+     "EMAIL",
+     "a.k@vit.ac.in"
+    ],
+    [
+     "PHONE",
+     "7012345678"
+    ]
+   ],
+   "python_output": "Reach me on [PHONE] or at [EMAIL]"
+  },
+  {
+   "text": "Batch 2024 had 120 interns.",
+   "gold": [],
+   "python_found": [],
+   "python_output": "Batch 2024 had 120 interns."
+  },
+  {
+   "text": "The guide Mr. Arjun Rao was strict but fair.",
+   "gold": [
+    [
+     "PERSON",
+     "Arjun Rao"
+    ]
+   ],
+   "python_found": [
+    [
+     "PERSON",
+     "Mr"
+    ]
+   ],
+   "python_output": "The guide [PERSON]. Arjun Rao was strict but fair."
+  },
+  {
+   "text": "We deployed on 10.0.0.5 inside the VPN.",
+   "gold": [
+    [
+     "IP",
+     "10.0.0.5"
+    ]
+   ],
+   "python_found": [
+    [
+     "IP",
+     "10.0.0.5"
+    ]
+   ],
+   "python_output": "We deployed on [IP] inside the VPN."
+  },
+  {
+   "text": "Score was 8.5 out of 10.",
+   "gold": [],
+   "python_found": [],
+   "python_output": "Score was 8.5 out of 10."
+  },
+  {
+   "text": "My name is Fatima Khan and I was in the data team.",
+   "gold": [
+    [
+     "PERSON",
+     "Fatima Khan"
+    ]
+   ],
+   "python_found": [
+    [
+     "PERSON",
+     "Fatima Khan"
+    ]
+   ],
+   "python_output": "My name is [PERSON] and I was in the data team."
+  },
+  {
+   "text": "Ticket 4521 was raised for the laptop issue.",
+   "gold": [],
+   "python_found": [],
+   "python_output": "Ticket 4521 was raised for the laptop issue."
+  },
+  {
+   "text": "Call me later at 98765 43210 please.",
+   "gold": [
+    [
+     "PHONE",
+     "98765 43210"
+    ]
+   ],
+   "python_found": [
+    [
+     "PHONE",
+     "98765 43210"
+    ]
+   ],
+   "python_output": "Call me later at [PHONE] please."
+  }
+ ]
+}
