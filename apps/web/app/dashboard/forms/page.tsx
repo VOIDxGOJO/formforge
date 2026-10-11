@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import { GenerateFormDialog } from '@/components/builder/GenerateFormDialog';
 
 type FormItem = { id: string; name: string; slug: string; isActive: boolean };
 
@@ -60,6 +61,7 @@ export default function FormsPage() {
           <Button onClick={() => createForm.mutate()} disabled={!name || createForm.isPending}>
             Create
           </Button>
+          <GenerateFormDialog workspaceId={workspaceId} />
         </div>
       </div>
       {!data?.length ? (

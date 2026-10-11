@@ -11,6 +11,7 @@ import { formsRouter } from './routes/forms.routes.js';
 import { publicRouter } from './routes/public.routes.js';
 import { uploadsRouter } from './routes/uploads.routes.js';
 import { sseRouter } from './routes/sse.routes.js';
+import { aiFormsRouter } from './routes/ai-form.routes.js';
 import { globalRateLimiter } from './middleware/rate-limit.js';
 import { notFoundHandler } from './middleware/not-found.js';
 import { errorHandler } from './middleware/error-handler.js';
@@ -61,6 +62,7 @@ export const createApp = (): express.Application => {
     '/api/v1/workspaces/:workspaceId/forms',
     formsRouter
   );
+  app.use('/api/v1/workspaces/:workspaceId/ai/forms', aiFormsRouter);
   app.use('/api/v1/uploads', uploadsRouter);
   app.use('/api/v1/sse', sseRouter);
   app.use('/api/public', publicRouter);
