@@ -1,0 +1,44 @@
+{
+  "full": {
+    "questions": 9.680833333333332,
+    "seconds": 98.16833333333334,
+    "coverage": 0.8576111111111112,
+    "pred_acc_pm1": 0.8635747354497355,
+    "redundant": 0.0
+  },
+  "no_information_gain": {
+    "questions": 10.0,
+    "seconds": 96.51333333333334,
+    "coverage": 0.8458333333333335,
+    "pred_acc_pm1": 0.8364583333333334,
+    "redundant": 0.0
+  },
+  "no_redundancy": {
+    "questions": 9.694166666666666,
+    "seconds": 99.4925,
+    "coverage": 0.8590277777777778,
+    "pred_acc_pm1": 0.8477141203703704,
+    "redundant": 0.0
+  },
+  "no_burden": {
+    "questions": 9.687083333333332,
+    "seconds": 99.33666666666666,
+    "coverage": 0.8566944444444445,
+    "pred_acc_pm1": 0.8576967592592593,
+    "redundant": 0.0
+  },
+  "no_coverage": {
+    "questions": 9.683333333333334,
+    "seconds": 98.15791666666667,
+    "coverage": 0.8534166666666668,
+    "pred_acc_pm1": 0.8621164021164022,
+    "redundant": 0.043333333333333335
+  },
+  "relevance_only": {
+    "questions": 10.0,
+    "seconds": 105.0,
+    "coverage": 0.7811944444444444,
+    "pred_acc_pm1": 0.7111111111111112,
+    "redundant": 0.3333333333333333
+  }
+}

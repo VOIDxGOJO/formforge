@@ -1,0 +1,46 @@
+[
+ {
+  "group": "Engaged, well mentored",
+  "n": 549,
+  "static_q": 13.75591985428051,
+  "adaptive_q": 8.56648451730419,
+  "static_cov": 0.8570734669095326,
+  "adaptive_cov": 0.8500303582270796,
+  "static_done": 0.6958105646630237,
+  "adaptive_done": 0.8524590163934426,
+  "acc": 0.888118327735814
+ },
+ {
+  "group": "Overloaded",
+  "n": 365,
+  "static_q": 13.605479452054794,
+  "adaptive_q": 9.142465753424657,
+  "static_cov": 0.8474885844748858,
+  "adaptive_cov": 0.7899543378995435,
+  "static_done": 0.7013698630136986,
+  "adaptive_done": 0.8301369863013699,
+  "acc": 0.8160164264958785
+ },
+ {
+  "group": "Under-utilised",
+  "n": 374,
+  "static_q": 13.815508021390375,
+  "adaptive_q": 8.879679144385026,
+  "static_cov": 0.8609625668449198,
+  "adaptive_cov": 0.8313725490196077,
+  "static_done": 0.7272727272727273,
+  "adaptive_done": 0.8475935828877005,
+  "acc": 0.8541961826052735
+ },
+ {
+  "group": "Blocked by infrastructure",
+  "n": 212,
+  "static_q": 13.580188679245284,
+  "adaptive_q": 9.132075471698114,
+  "static_cov": 0.8468553459119497,
+  "adaptive_cov": 0.7999999999999998,
+  "static_done": 0.6698113207547169,
+  "adaptive_done": 0.839622641509434,
+  "acc": 0.7744392072811884
+ }
+]

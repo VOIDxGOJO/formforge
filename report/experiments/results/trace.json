@@ -1,0 +1,254 @@
+{
+ "respondent": 15,
+ "seconds": 78.0,
+ "steps": [
+  {
+   "step": 1,
+   "coverage": 0,
+   "gain": 0.17,
+   "top": [
+    [
+     "q7",
+     0.652
+    ],
+    [
+     "q3",
+     0.616
+    ],
+    [
+     "q6",
+     0.57
+    ]
+   ],
+   "asked": "q1",
+   "anchor": true,
+   "answer": "Data & Analytics"
+  },
+  {
+   "step": 2,
+   "coverage": 7,
+   "gain": 0.172,
+   "top": [
+    [
+     "q7",
+     0.646
+    ],
+    [
+     "q3",
+     0.611
+    ],
+    [
+     "q6",
+     0.559
+    ]
+   ],
+   "asked": "q3",
+   "anchor": true,
+   "answer": "5"
+  },
+  {
+   "step": 3,
+   "coverage": 33,
+   "gain": 0.084,
+   "top": [
+    [
+     "q9",
+     0.608
+    ],
+    [
+     "q16",
+     0.563
+    ],
+    [
+     "q11",
+     0.556
+    ]
+   ],
+   "asked": "q13",
+   "anchor": true,
+   "answer": "Yes"
+  },
+  {
+   "step": 4,
+   "coverage": 40,
+   "gain": 0.084,
+   "top": [
+    [
+     "q9",
+     0.607
+    ],
+    [
+     "q16",
+     0.583
+    ],
+    [
+     "q8",
+     0.548
+    ]
+   ],
+   "asked": "q9",
+   "anchor": false,
+   "answer": "5"
+  },
+  {
+   "step": 5,
+   "coverage": 53,
+   "gain": 0.089,
+   "top": [
+    [
+     "q16",
+     0.591
+    ],
+    [
+     "q2",
+     0.545
+    ],
+    [
+     "q11",
+     0.525
+    ]
+   ],
+   "asked": "q16",
+   "anchor": false,
+   "answer": "2"
+  },
+  {
+   "step": 6,
+   "coverage": 53,
+   "gain": 0.089,
+   "top": [
+    [
+     "q2",
+     0.579
+    ],
+    [
+     "q11",
+     0.565
+    ],
+    [
+     "q8",
+     0.525
+    ]
+   ],
+   "asked": "q2",
+   "anchor": false,
+   "answer": ">12 wk"
+  },
+  {
+   "step": 7,
+   "coverage": 73,
+   "gain": 0.096,
+   "top": [
+    [
+     "q11",
+     0.565
+    ],
+    [
+     "q8",
+     0.525
+    ],
+    [
+     "q15",
+     0.492
+    ]
+   ],
+   "asked": "q11",
+   "anchor": false,
+   "answer": "4"
+  },
+  {
+   "step": 8,
+   "coverage": 80,
+   "gain": 0.106,
+   "top": [
+    [
+     "q8",
+     0.533
+    ],
+    [
+     "q15",
+     0.499
+    ],
+    [
+     "q12",
+     0.464
+    ]
+   ],
+   "asked": "q8",
+   "anchor": false,
+   "answer": "30-40 h"
+  },
+  {
+   "step": 9,
+   "coverage": 87,
+   "gain": 0.09,
+   "top": [
+    [
+     "q15",
+     0.594
+    ],
+    [
+     "q12",
+     0.535
+    ],
+    [
+     "q10",
+     0.323
+    ]
+   ],
+   "asked": null,
+   "anchor": false,
+   "answer": null
+  }
+ ],
+ "imputed": [
+  {
+   "q": "q4",
+   "predicted": "Daily",
+   "true": "Daily",
+   "conf": 0.82
+  },
+  {
+   "q": "q5",
+   "predicted": "5",
+   "true": "5",
+   "conf": 0.78
+  },
+  {
+   "q": "q6",
+   "predicted": "5",
+   "true": "5",
+   "conf": 0.72
+  },
+  {
+   "q": "q7",
+   "predicted": "5",
+   "true": "5",
+   "conf": 0.87
+  },
+  {
+   "q": "q10",
+   "predicted": "5",
+   "true": "5",
+   "conf": 0.72
+  },
+  {
+   "q": "q12",
+   "predicted": "5",
+   "true": "5",
+   "conf": 0.65
+  },
+  {
+   "q": "q14",
+   "predicted": "Yes",
+   "true": "Yes",
+   "conf": 0.9
+  },
+  {
+   "q": "q15",
+   "predicted": "Remote",
+   "true": "On-site",
+   "conf": 0.46
+  }
+ ]
+}
