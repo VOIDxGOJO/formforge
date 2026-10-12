@@ -1,0 +1,106 @@
+{
+  "A_no_prior|0": {
+    "system": "A_no_prior",
+    "n_real": 0,
+    "questions": 10.0,
+    "pred_acc_pm1": 0.5343888888888889,
+    "pred_sd": 0.008127836636834009,
+    "coverage": 0.7737333333333334
+  },
+  "B_synthetic|0": {
+    "system": "B_synthetic",
+    "n_real": 0,
+    "questions": 9.689,
+    "pred_acc_pm1": 0.8490747354497354,
+    "pred_sd": 0.016182567929105097,
+    "coverage": 0.8148222222222223
+  },
+  "A_no_prior|10": {
+    "system": "A_no_prior",
+    "n_real": 10,
+    "questions": 10.0,
+    "pred_acc_pm1": 0.7506666666666667,
+    "pred_sd": 0.02550756363256074,
+    "coverage": 0.7926222222222222
+  },
+  "B_synthetic|10": {
+    "system": "B_synthetic",
+    "n_real": 10,
+    "questions": 9.746333333333334,
+    "pred_acc_pm1": 0.8614755291005292,
+    "pred_sd": 0.008469236057262458,
+    "coverage": 0.8193777777777779
+  },
+  "A_no_prior|25": {
+    "system": "A_no_prior",
+    "n_real": 25,
+    "questions": 9.943666666666667,
+    "pred_acc_pm1": 0.7734702380952381,
+    "pred_sd": 0.005227202780073315,
+    "coverage": 0.8140444444444445
+  },
+  "B_synthetic|25": {
+    "system": "B_synthetic",
+    "n_real": 25,
+    "questions": 9.847,
+    "pred_acc_pm1": 0.8620436507936509,
+    "pred_sd": 0.01569925728384305,
+    "coverage": 0.8291111111111112
+  },
+  "A_no_prior|50": {
+    "system": "A_no_prior",
+    "n_real": 50,
+    "questions": 9.963,
+    "pred_acc_pm1": 0.8141666666666666,
+    "pred_sd": 0.01174050706625739,
+    "coverage": 0.8384444444444444
+  },
+  "B_synthetic|50": {
+    "system": "B_synthetic",
+    "n_real": 50,
+    "questions": 9.889,
+    "pred_acc_pm1": 0.8582453703703704,
+    "pred_sd": 0.015045715088489694,
+    "coverage": 0.8397111111111112
+  },
+  "A_no_prior|100": {
+    "system": "A_no_prior",
+    "n_real": 100,
+    "questions": 10.0,
+    "pred_acc_pm1": 0.8355,
+    "pred_sd": 0.004929753455884201,
+    "coverage": 0.8455111111111112
+  },
+  "B_synthetic|100": {
+    "system": "B_synthetic",
+    "n_real": 100,
+    "questions": 9.983,
+    "pred_acc_pm1": 0.8578492063492064,
+    "pred_sd": 0.010389807397522948,
+    "coverage": 0.8508444444444445
+  },
+  "A_no_prior|250": {
+    "system": "A_no_prior",
+    "n_real": 250,
+    "questions": 9.884666666666666,
+    "pred_acc_pm1": 0.8489265873015874,
+    "pred_sd": 0.009713979336905354,
+    "coverage": 0.8574444444444446
+  },
+  "B_synthetic|250": {
+    "system": "B_synthetic",
+    "n_real": 250,
+    "questions": 9.886666666666667,
+    "pred_acc_pm1": 0.8586289682539683,
+    "pred_sd": 0.012312176062348764,
+    "coverage": 0.8592666666666666
+  },
+  "oracle|oracle": {
+    "system": "oracle",
+    "n_real": "oracle",
+    "questions": 9.683333333333334,
+    "pred_acc_pm1": 0.862390873015873,
+    "pred_sd": 0.005036444056621425,
+    "coverage": 0.858
+  }
+}

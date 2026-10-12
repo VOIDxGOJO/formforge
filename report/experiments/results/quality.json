@@ -1,0 +1,280 @@
+{
+  "double_barrelled": {
+    "precision": 1.0,
+    "recall": 0.667,
+    "f1": 0.8,
+    "tp": 8,
+    "fp": 0,
+    "fn": 4,
+    "support": 12
+  },
+  "leading": {
+    "precision": 0.909,
+    "recall": 1.0,
+    "f1": 0.952,
+    "tp": 10,
+    "fp": 1,
+    "fn": 0,
+    "support": 10
+  },
+  "ambiguous": {
+    "precision": 0.789,
+    "recall": 1.0,
+    "f1": 0.882,
+    "tp": 15,
+    "fp": 4,
+    "fn": 0,
+    "support": 15
+  },
+  "any_issue": {
+    "precision": 0.912,
+    "recall": 0.886,
+    "f1": 0.899,
+    "tp": 31,
+    "fp": 3,
+    "fn": 4,
+    "tn": 32,
+    "accuracy": 0.9
+  },
+  "n_questions": 70,
+  "n_clean": 35,
+  "errors": [
+    {
+      "q": "How satisfied were you with your mentor and your project?",
+      "gold": [
+        "double_barrelled"
+      ],
+      "pred": []
+    },
+    {
+      "q": "Was the course content relevant and up to date?",
+      "gold": [
+        "double_barrelled"
+      ],
+      "pred": []
+    },
+    {
+      "q": "How clear were the instructions and the deadlines?",
+      "gold": [
+        "double_barrelled"
+      ],
+      "pred": []
+    },
+    {
+      "q": "Rate the food and the cleanliness of the hostel mess.",
+      "gold": [
+        "double_barrelled"
+      ],
+      "pred": []
+    },
+    {
+      "q": "How much did you enjoy our excellent service?",
+      "gold": [
+        "leading"
+      ],
+      "pred": [
+        "ambiguous",
+        "leading"
+      ]
+    },
+    {
+      "q": "How much did you love the new dashboard?",
+      "gold": [
+        "leading"
+      ],
+      "pred": [
+        "ambiguous",
+        "leading"
+      ]
+    },
+    {
+      "q": "How many lab sessions did you attend this semester?",
+      "gold": [],
+      "pred": [
+        "ambiguous"
+      ]
+    },
+    {
+      "q": "How many members were in your project team?",
+      "gold": [],
+      "pred": [
+        "ambiguous"
+      ]
+    },
+    {
+      "q": "How useful was the orientation session for understanding the curriculum?",
+      "gold": [],
+      "pred": [
+        "leading"
+      ]
+    }
+  ],
+  "redundancy_pairs": {
+    "0.3": {
+      "precision": 0.917,
+      "recall": 1.0,
+      "f1": 0.957,
+      "tp": 11,
+      "fp": 1,
+      "fn": 0
+    },
+    "0.4": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 11,
+      "fp": 0,
+      "fn": 0
+    },
+    "0.5": {
+      "precision": 1.0,
+      "recall": 0.909,
+      "f1": 0.952,
+      "tp": 10,
+      "fp": 0,
+      "fn": 1
+    },
+    "0.6": {
+      "precision": 1.0,
+      "recall": 0.818,
+      "f1": 0.9,
+      "tp": 9,
+      "fp": 0,
+      "fn": 2
+    }
+  },
+  "n_pairs": 24,
+  "demo_form": [
+    {
+      "type": "DROPDOWN",
+      "label": "Which department did you intern in?",
+      "seconds": 12.1,
+      "flesch": 73.8,
+      "issues": []
+    },
+    {
+      "type": "DROPDOWN",
+      "label": "How long was your internship?",
+      "seconds": 11.8,
+      "flesch": 83.3,
+      "issues": []
+    },
+    {
+      "type": "RATING",
+      "label": "Overall, how satisfied were you with the internship?",
+      "seconds": 12.3,
+      "flesch": 50.7,
+      "issues": []
+    },
+    {
+      "type": "DROPDOWN",
+      "label": "How often did you meet your mentor?",
+      "seconds": 12.4,
+      "flesch": 91.0,
+      "issues": [
+        "ambiguous"
+      ]
+    },
+    {
+      "type": "RATING",
+      "label": "How useful was the feedback from your mentor?",
+      "seconds": 12.3,
+      "flesch": 71.8,
+      "issues": [
+        "leading"
+      ]
+    },
+    {
+      "type": "RATING",
+      "label": "How well did your tasks match your skills?",
+      "seconds": 12.3,
+      "flesch": 114.1,
+      "issues": []
+    },
+    {
+      "type": "RATING",
+      "label": "How would you rate your satisfaction with the internship?",
+      "seconds": 12.6,
+      "flesch": 66.1,
+      "issues": []
+    },
+    {
+      "type": "DROPDOWN",
+      "label": "How many hours did you work in a typical week?",
+      "seconds": 13.3,
+      "flesch": 86.7,
+      "issues": []
+    },
+    {
+      "type": "RATING",
+      "label": "How manageable was your workload?",
+      "seconds": 11.4,
+      "flesch": 66.4,
+      "issues": []
+    },
+    {
+      "type": "RATING",
+      "label": "How much did you improve technically?",
+      "seconds": 11.7,
+      "flesch": 59.7,
+      "issues": [
+        "ambiguous"
+      ]
+    },
+    {
+      "type": "RATING",
+      "label": "How adequate were the tools and systems you were given?",
+      "seconds": 12.9,
+      "flesch": 78.2,
+      "issues": [
+        "ambiguous",
+        "double_barrelled"
+      ]
+    },
+    {
+      "type": "RATING",
+      "label": "How clear was communication inside your team?",
+      "seconds": 12.0,
+      "flesch": 54.7,
+      "issues": []
+    },
+    {
+      "type": "DROPDOWN",
+      "label": "Would you recommend this internship to a junior?",
+      "seconds": 12.1,
+      "flesch": 61.2,
+      "issues": []
+    },
+    {
+      "type": "DROPDOWN",
+      "label": "Would you accept a pre-placement offer from this company?",
+      "seconds": 12.4,
+      "flesch": 61.3,
+      "issues": []
+    },
+    {
+      "type": "DROPDOWN",
+      "label": "What was your work mode?",
+      "seconds": 11.2,
+      "flesch": 117.2,
+      "issues": []
+    },
+    {
+      "type": "RATING",
+      "label": "How fair was the stipend for the work done?",
+      "seconds": 12.6,
+      "flesch": 103.7,
+      "issues": [
+        "ambiguous"
+      ]
+    },
+    {
+      "type": "TEXTAREA",
+      "label": "What should the company improve for the next batch of interns?",
+      "seconds": 48.1,
+      "flesch": 80.3,
+      "issues": []
+    }
+  ],
+  "demo_total_seconds": 243.5
+}

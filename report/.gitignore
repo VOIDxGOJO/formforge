@@ -1,0 +1,6 @@
+node_modules/
+FormForge_Report_raw.docx
+*.pre8
+*.bak
+__pycache__/
+cookies.txt
