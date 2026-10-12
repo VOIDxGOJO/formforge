@@ -123,7 +123,10 @@ Everything else in FormForge works without it.
 ```bash
 npm run db:up
 npm run db:migrate
+npm run db:seed        # optional: the FormForge 2.0 demo workspace
 ```
+
+`db:seed` creates two demo accounts and a workspace with seven ready-made forms: 600+ responses spread over the last 30 days, an adaptive form with a trained model, a warm-started form, and cached insights. Log in as `demo.reviewer@formforge.test` (Owner) or `invitee@formforge.test` (Viewer); the passwords are in [`apps/api/prisma/demo/accounts.json`](apps/api/prisma/demo/accounts.json). These accounts exist only in your own database. Run `npm run db:seed -- --reset` to start the demo over.
 
 ### 4. Run
 
@@ -154,6 +157,7 @@ npm run dev:web
 | `npm run setup` | Install + Postgres + migrate (first-time) |
 | `npm run build` | Production build (all packages) |
 | `npm run typecheck` | TypeScript strict check |
+| `npm run db:seed` | Create the demo accounts and demo workspace (`-- --reset` to recreate) |
 | `npm test` | Unit tests (rules, engine parity, redactor, providers, …) |
 | `npm run test:functional -w @formforge/api` | 29 API tests against a real `<db>_test` database (needs `npm run db:up`) |
 
