@@ -67,12 +67,16 @@ export const formService = {
 
   create: async (userId: string, workspaceId: string, name: string, objective?: string) => {
     await formService.assertAccess(userId, workspaceId);
-    const slug = slugify(name);
-    try {
-      return await formRepository.create({ workspaceId, name, slug, objective });
-    } catch {
-      throw ConflictError('Could not create form slug');
+    // Only a duplicate slug (unique violation) is retried; any other error, such as a
+    // database that is missing a migration, surfaces with its real cause.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        return await formRepository.create({ workspaceId, name, slug: slugify(name), objective });
+      } catch (err) {
+        if (!(err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002')) throw err;
+      }
     }
+    throw ConflictError('Could not create a unique form slug');
   },
 
   update: async (
