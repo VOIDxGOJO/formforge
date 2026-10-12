@@ -35,7 +35,9 @@ python charts.py             # chapter 7 charts
 
 ## Demo accounts
 
-`demo_seed_credentials.txt` lists two **local demo accounts** (`@formforge.test`). They exist only in a database seeded with `seed.sql` on your own machine and give no access to anything online. The AI key is never stored here; put your own key in `apps/api/.env` (see the main README).
+The demo accounts are created by **`npm run db:seed`** in the repository root, after `npm run db:migrate`. It builds the whole demo workspace used in the report and the screenshots: seven forms, 600+ responses over the last 30 days, a trained adaptive model, a warm-started form and cached insights. The logins (`demo.reviewer@formforge.test` as Owner, `invitee@formforge.test` as Viewer) and their passwords are in [`apps/api/prisma/demo/accounts.json`](../apps/api/prisma/demo/accounts.json) and in `demo_seed_credentials.txt`. They exist only in your own database and give no access to anything online. The AI key is never stored here; put your own key in `apps/api/.env` (see the main README).
+
+`seed.sql` is an older export of raw responses only. It is kept for reference and does not create accounts; use `npm run db:seed` instead.
 
 ## Rebuilding the documents
 

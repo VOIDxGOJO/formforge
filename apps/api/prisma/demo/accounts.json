@@ -1,0 +1,13 @@
+{
+  "note": "Local demo accounts created by npm run db:seed. They only exist in your own database.",
+  "accounts": [
+    {
+      "email": "demo.reviewer@formforge.test",
+      "password": "Demo-63785aec7cfa"
+    },
+    {
+      "email": "invitee@formforge.test",
+      "password": "Inv-453da1b4dfec"
+    }
+  ]
+}
